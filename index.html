@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ESC·IA — École Supérieure de Commerce</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Fraunces:ital,wght@0,300;0,700;0,900;1,300;1,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#05080E;--ink2:#090D1A;--ink3:#0F1526;--ink4:#162035;
+  --teal:#00C9B1;--teal2:#00EDD1;--teal3:rgba(0,201,177,.12);
+  --amber:#F5A623;--amber2:#FFD080;
+  --violet:#8B6FFF;--rose:#FF6B9D;
+  --cream:#EEF0F5;--white:#FFFFFF;
+  --border:rgba(0,201,177,.15);
+  --font-head:'Fraunces',serif;
+  --font-body:'Syne',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font-body);background:var(--ink);color:var(--cream);overflow-x:hidden;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-thumb{background:var(--teal);border-radius:4px;}
+
+/* CURSOR */
+#cur{position:fixed;width:12px;height:12px;background:var(--teal);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:screen;transition:transform .1s;}
+#cur2{position:fixed;width:36px;height:36px;border:1.5px solid rgba(0,201,177,.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:left .12s,top .12s;}
+
+/* PAGES */
+.page{display:none;position:relative;z-index:10;min-height:100vh;}
+.page.active{display:block;}
+
+/* ===== NAV ===== */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  padding:20px 72px;display:flex;align-items:center;justify-content:space-between;
+  background:rgba(5,8,14,.8);backdrop-filter:blur(28px);
+  border-bottom:1px solid var(--border);
+  transition:padding .3s;
+}
+.logo{font-family:var(--font-head);font-size:22px;font-weight:900;cursor:pointer;letter-spacing:-0.5px;}
+.logo .t{color:var(--teal);}
+.logo .d{color:var(--cream);}
+.logo .sep{color:var(--amber);margin:0 3px;}
+.nav-links{display:flex;gap:36px;}
+.nav-links a{color:rgba(238,240,245,.5);font-size:13px;font-weight:600;text-decoration:none;cursor:pointer;transition:color .2s;letter-spacing:.3px;}
+.nav-links a:hover{color:var(--teal);}
+.nav-r{display:flex;gap:10px;align-items:center;}
+.nbtn{padding:9px 22px;border-radius:8px;font-size:13px;font-weight:700;font-family:var(--font-body);cursor:pointer;transition:all .2s;border:none;letter-spacing:.3px;}
+.nbtn-o{background:transparent;border:1.5px solid rgba(0,201,177,.3)!important;color:var(--cream);}
+.nbtn-o:hover{border-color:var(--teal)!important;color:var(--teal);}
+.nbtn-t{background:var(--teal);color:var(--ink);}
+.nbtn-t:hover{background:var(--teal2);transform:translateY(-1px);box-shadow:0 8px 28px rgba(0,201,177,.3);}
+.nlvl{font-size:11px;padding:4px 12px;border-radius:100px;background:rgba(0,201,177,.12);border:1px solid var(--border);color:var(--teal);font-weight:700;letter-spacing:1px;}
+
+/* ===== HERO ===== */
+#hero-canvas{position:fixed;inset:0;z-index:1;}
+.hero-overlay{position:fixed;inset:0;z-index:2;background:radial-gradient(ellipse 80% 80% at 50% 50%,rgba(5,8,14,0) 0%,rgba(5,8,14,.7) 100%);}
+
+#home{z-index:10;}
+.hero-section{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:120px 72px 80px;position:relative;text-align:center;}
+
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  background:rgba(0,201,177,.08);border:1px solid rgba(0,201,177,.25);
+  padding:8px 22px;border-radius:100px;
+  font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--teal);margin-bottom:36px;
+  animation:fadeUp .9s both;
+}
+.eyebrow-pulse{width:7px;height:7px;background:var(--teal);border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(0,201,177,.6)}50%{box-shadow:0 0 0 8px rgba(0,201,177,0)}}
+
+.hero-h1{
+  font-family:var(--font-head);
+  font-size:clamp(52px,7.5vw,110px);
+  line-height:.95;
+  font-weight:900;
+  color:var(--white);
+  margin-bottom:32px;
+  animation:fadeUp .9s .1s both;
+  max-width:1000px;
+}
+.hero-h1 .teal{color:var(--teal);}
+.hero-h1 .it{font-style:italic;font-weight:300;color:rgba(238,240,245,.65);}
+.hero-h1 .am{color:var(--amber);}
+
+.hero-p{
+  font-size:18px;line-height:1.7;color:rgba(238,240,245,.55);
+  max-width:580px;margin:0 auto 48px;
+  animation:fadeUp .9s .2s both;
+  font-weight:400;
+}
+
+.hero-ctas{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;animation:fadeUp .9s .3s both;}
+.hcta{
+  padding:17px 40px;border-radius:10px;font-size:16px;font-weight:700;
+  font-family:var(--font-body);cursor:pointer;transition:all .3s;
+  text-decoration:none;display:inline-block;border:none;letter-spacing:.3px;
+}
+.hcta-p{background:var(--teal);color:var(--ink);}
+.hcta-p:hover{background:var(--teal2);transform:translateY(-3px);box-shadow:0 16px 48px rgba(0,201,177,.4);}
+.hcta-s{background:transparent;border:1.5px solid rgba(238,240,245,.2)!important;color:var(--cream);}
+.hcta-s:hover{border-color:var(--teal)!important;color:var(--teal);}
+
+/* FLOATING 3D CARDS */
+.float-cards{position:relative;height:220px;width:100%;max-width:900px;margin:60px auto 0;animation:fadeUp .9s .4s both;}
+.fc{
+  position:absolute;background:rgba(15,21,38,.85);
+  border:1px solid rgba(0,201,177,.2);border-radius:18px;
+  padding:22px 26px;backdrop-filter:blur(20px);
+  transition:transform .4s cubic-bezier(.23,1,.32,1),box-shadow .4s;
+  cursor:default;
+}
+.fc:hover{z-index:20;box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 0 1px rgba(0,201,177,.4);}
+.fc1{left:0;top:20px;width:230px;transform:rotate(-5deg) translateY(0px);animation:float1 6s ease-in-out infinite;}
+.fc2{left:50%;transform:translateX(-50%) translateY(-20px);width:280px;top:0;z-index:5;animation:float2 7s ease-in-out infinite;}
+.fc3{right:0;top:20px;width:230px;transform:rotate(5deg);animation:float3 5.5s ease-in-out infinite;}
+@keyframes float1{0%,100%{transform:rotate(-5deg) translateY(0)}50%{transform:rotate(-5deg) translateY(-14px)}}
+@keyframes float2{0%,100%{transform:translateX(-50%) translateY(-20px)}50%{transform:translateX(-50%) translateY(-36px)}}
+@keyframes float3{0%,100%{transform:rotate(5deg) translateY(0)}50%{transform:rotate(5deg) translateY(-12px)}}
+.fc-icon{font-size:26px;margin-bottom:10px;}
+.fc-title{font-family:var(--font-head);font-size:16px;font-weight:700;color:var(--white);margin-bottom:5px;}
+.fc-sub{font-size:12px;color:rgba(238,240,245,.45);line-height:1.4;}
+.fc-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px;}
+.fc-tag{font-size:10px;padding:3px 9px;border-radius:100px;background:rgba(0,201,177,.1);border:1px solid rgba(0,201,177,.2);color:var(--teal);font-weight:700;}
+
+/* STATS STRIP */
+.stats-strip{
+  display:flex;justify-content:center;gap:64px;
+  padding:40px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  background:rgba(15,21,38,.6);backdrop-filter:blur(20px);
+  position:relative;z-index:10;
+}
+.ss-item{text-align:center;}
+.ss-num{font-family:var(--font-head);font-size:42px;font-weight:900;color:var(--teal);line-height:1;}
+.ss-lbl{font-size:12px;color:rgba(238,240,245,.4);margin-top:6px;letter-spacing:.5px;font-weight:600;}
+
+/* FEATURE CARDS */
+.features-section{
+  padding:100px 72px;position:relative;z-index:10;
+  background:linear-gradient(180deg,var(--ink) 0%,var(--ink2) 100%);
+}
+.sec-tag{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--teal);font-weight:700;margin-bottom:12px;text-align:center;}
+.sec-title{font-family:var(--font-head);font-size:clamp(32px,4.5vw,58px);font-weight:900;color:var(--white);text-align:center;margin-bottom:16px;line-height:1.05;}
+.sec-sub{font-size:16px;color:rgba(238,240,245,.45);text-align:center;max-width:520px;margin:0 auto 64px;line-height:1.7;}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1100px;margin:0 auto;}
+.feat-card{
+  background:var(--ink3);border:1px solid var(--border);border-radius:20px;
+  padding:36px 32px;cursor:pointer;position:relative;overflow:hidden;
+  transition:all .35s cubic-bezier(.23,1,.32,1);
+}
+.feat-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,201,177,.08) 0%,transparent 60%);opacity:0;transition:.3s;}
+.feat-card:hover{transform:translateY(-8px);border-color:rgba(0,201,177,.4);box-shadow:0 24px 72px rgba(0,0,0,.5),0 0 0 1px rgba(0,201,177,.15);}
+.feat-card:hover::before{opacity:1;}
+.feat-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--teal),transparent);transform:scaleX(0);transition:.35s;}
+.feat-card:hover::after{transform:scaleX(1);}
+.feat-icon{font-size:34px;margin-bottom:18px;}
+.feat-title{font-family:var(--font-head);font-size:21px;font-weight:700;color:var(--white);margin-bottom:10px;}
+.feat-desc{font-size:14px;color:rgba(238,240,245,.5);line-height:1.6;}
+
+/* MODULES SHOWCASE */
+.modules-section{padding:80px 72px;position:relative;z-index:10;background:var(--ink2);}
+.modules-tabs{display:flex;gap:0;background:var(--ink3);border:1px solid var(--border);border-radius:12px;padding:5px;max-width:420px;margin:0 auto 48px;}
+.mod-tab{flex:1;padding:11px;text-align:center;font-size:13px;font-weight:700;cursor:pointer;border-radius:8px;color:rgba(238,240,245,.4);transition:all .2s;}
+.mod-tab.active{background:var(--teal);color:var(--ink);}
+.modules-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:1000px;margin:0 auto;}
+.mod-card{
+  background:var(--ink3);border:1px solid var(--border);border-radius:14px;
+  padding:22px 20px;display:flex;align-items:center;gap:14px;
+  transition:all .25s;cursor:pointer;
+}
+.mod-card:hover{border-color:rgba(0,201,177,.4);background:rgba(15,21,38,.9);transform:translateX(4px);}
+.mod-em{font-size:26px;}
+.mod-icon{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.mod-icon svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+.mi-teal{background:rgba(0,201,177,.12);color:var(--teal);}
+.mi-amber{background:rgba(245,166,35,.12);color:var(--amber);}
+.mi-violet{background:rgba(139,111,255,.12);color:var(--violet);}
+.mi-rose{background:rgba(255,107,157,.12);color:var(--rose);}
+.mi-blue{background:rgba(61,126,232,.12);color:#3D7EE8;}
+.mi-green{background:rgba(61,214,140,.12);color:#3DD68C;}
+.mod-name{font-size:14px;font-weight:700;color:var(--white);}
+.mod-desc{font-size:12px;color:rgba(238,240,245,.4);margin-top:3px;}
+.module-panel{display:none;}
+.module-panel.active{display:grid;}
+
+/* ===== AUTH MODAL ===== */
+.modal-bg{display:none;position:fixed;inset:0;z-index:800;background:rgba(0,0,0,.92);backdrop-filter:blur(14px);align-items:center;justify-content:center;}
+.modal-bg.open{display:flex;}
+.auth-box{background:var(--ink2);border:1px solid var(--border);border-radius:24px;padding:52px 48px;width:460px;max-width:95vw;position:relative;animation:popIn .35s cubic-bezier(.23,1,.32,1);}
+@keyframes popIn{from{opacity:0;transform:scale(.92) translateY(20px)}to{opacity:1;transform:none}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+.mclose{position:absolute;top:18px;right:18px;background:rgba(238,240,245,.07);border:none;width:36px;height:36px;border-radius:50%;color:var(--cream);font-size:18px;cursor:pointer;transition:background .2s;display:flex;align-items:center;justify-content:center;}
+.mclose:hover{background:rgba(238,240,245,.14);}
+.auth-tabs{display:flex;background:var(--ink3);border-radius:10px;padding:4px;margin-bottom:36px;}
+.atab{flex:1;padding:11px;text-align:center;font-size:14px;font-weight:700;cursor:pointer;border-radius:7px;color:rgba(238,240,245,.4);transition:all .2s;}
+.atab.active{background:var(--teal);color:var(--ink);}
+.aform{display:none;}
+.aform.active{display:block;}
+.atitle{font-family:var(--font-head);font-size:26px;font-weight:700;color:var(--white);margin-bottom:6px;}
+.asub{font-size:14px;color:rgba(238,240,245,.4);margin-bottom:28px;}
+.field label{display:block;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(238,240,245,.4);margin-bottom:7px;}
+.field{margin-bottom:14px;}
+.inp{width:100%;background:var(--ink3);border:1px solid rgba(0,201,177,.15);border-radius:10px;padding:13px 16px;color:var(--cream);font-family:var(--font-body);font-size:14px;outline:none;transition:border-color .2s;}
+.inp::placeholder{color:rgba(238,240,245,.2);}
+.inp:focus{border-color:var(--teal);}
+.inp option{background:var(--ink3);}
+.abtn{width:100%;padding:15px;background:var(--teal);color:var(--ink);border:none;border-radius:10px;font-weight:700;font-size:15px;cursor:pointer;font-family:var(--font-body);transition:all .2s;margin-top:6px;}
+.abtn:hover{background:var(--teal2);transform:translateY(-1px);}
+.aerr{font-size:13px;color:#FF6B6B;text-align:center;margin-top:10px;display:none;}
+.aok{font-size:13px;color:var(--teal);text-align:center;margin-top:10px;display:none;}
+
+/* ===== DASHBOARD ===== */
+#dashboard{padding:110px 72px 60px;background:linear-gradient(180deg,var(--ink) 0%,var(--ink2) 100%);}
+.dash-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:48px;flex-wrap:wrap;gap:16px;}
+.dash-greeting{font-family:var(--font-head);font-size:38px;font-weight:900;color:var(--white);}
+.dash-greeting span{color:var(--teal);}
+.dash-meta{font-size:13px;color:rgba(238,240,245,.4);margin-top:4px;font-weight:600;}
+.lout{background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.2);color:#FF6B6B;padding:10px 22px;border-radius:8px;font-size:13px;cursor:pointer;font-family:var(--font-body);font-weight:700;transition:all .2s;}
+.lout:hover{background:rgba(255,107,107,.2);}
+.dash-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+.dcard{
+  background:var(--ink3);border:1px solid var(--border);border-radius:18px;
+  padding:30px 28px;cursor:pointer;position:relative;overflow:hidden;
+  transition:all .3s cubic-bezier(.23,1,.32,1);
+}
+.dcard:hover{transform:translateY(-6px);border-color:rgba(0,201,177,.4);box-shadow:0 20px 60px rgba(0,0,0,.5);}
+.dcard-icon{font-size:32px;margin-bottom:14px;}
+.dcard-title{font-family:var(--font-head);font-size:20px;font-weight:700;color:var(--white);margin-bottom:7px;}
+.dcard-desc{font-size:13px;color:rgba(238,240,245,.45);line-height:1.5;}
+.dcard-arrow{position:absolute;bottom:22px;right:22px;font-size:20px;opacity:.25;transition:.2s;}
+.dcard:hover .dcard-arrow{opacity:1;transform:translate(3px,-3px);}
+
+/* ===== CHAT ===== */
+#chat-wrap{padding:90px 48px 60px;background:linear-gradient(180deg,var(--ink) 0%,var(--ink2) 100%);}
+.chat-layout{display:grid;grid-template-columns:260px 1fr;gap:20px;max-width:1100px;margin:0 auto;}
+.agents-sidebar{background:var(--ink3);border:1px solid var(--border);border-radius:18px;padding:22px;position:sticky;top:90px;height:fit-content;}
+.sb-title{font-family:var(--font-head);font-size:17px;font-weight:700;color:var(--white);margin-bottom:4px;}
+.sb-sub{font-size:12px;color:rgba(238,240,245,.35);margin-bottom:18px;}
+.lvl-btns{display:flex;flex-direction:column;gap:7px;margin-bottom:18px;}
+.lvl-btn{width:100%;padding:10px 14px;border-radius:9px;border:1px solid var(--border);background:transparent;color:rgba(238,240,245,.5);font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-body);transition:all .2s;text-align:left;letter-spacing:.3px;}
+.lvl-btn.active{background:rgba(0,201,177,.12);border-color:rgba(0,201,177,.35);color:var(--teal);}
+.ag-list{display:flex;flex-direction:column;gap:6px;}
+.ag-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;border:1px solid transparent;cursor:pointer;transition:all .2s;font-size:13px;color:rgba(238,240,245,.55);font-weight:600;}
+.ag-item:hover,.ag-item.active{background:rgba(0,201,177,.1);border-color:rgba(0,201,177,.25);color:var(--teal);}
+.ag-em{font-size:18px;}
+.chat-main{background:var(--ink3);border:1px solid var(--border);border-radius:18px;display:flex;flex-direction:column;overflow:hidden;}
+.chat-header{padding:18px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;background:rgba(15,21,38,.5);}
+.ch-av{width:46px;height:46px;border-radius:13px;background:rgba(0,201,177,.12);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:22px;}
+.ch-name{font-family:var(--font-head);font-size:18px;font-weight:700;color:var(--white);}
+.ch-desc{font-size:12px;color:rgba(238,240,245,.4);}
+.chat-messages{height:420px;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:16px;}
+.chat-messages::-webkit-scrollbar{width:3px;}
+.chat-messages::-webkit-scrollbar-thumb{background:rgba(0,201,177,.2);}
+.msg{display:flex;gap:10px;max-width:88%;}
+.msg.u{align-self:flex-end;flex-direction:row-reverse;}
+.msg-av{width:34px;height:34px;border-radius:50%;background:rgba(0,201,177,.12);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.msg.u .msg-av{background:rgba(139,111,255,.12);border-color:rgba(139,111,255,.25);}
+.msg-bubble{background:var(--ink4);border:1px solid var(--border);border-radius:14px 14px 14px 4px;padding:13px 17px;font-size:14px;line-height:1.65;color:var(--cream);}
+.msg.u .msg-bubble{background:rgba(139,111,255,.12);border-color:rgba(139,111,255,.2);border-radius:14px 14px 4px 14px;}
+.msg-time{font-size:10px;color:rgba(238,240,245,.25);margin-top:5px;}
+.typing{display:flex;gap:4px;align-items:center;}
+.typing span{width:5px;height:5px;background:var(--teal);border-radius:50%;animation:blink 1.3s infinite;}
+.typing span:nth-child(2){animation-delay:.18s;}
+.typing span:nth-child(3){animation-delay:.36s;}
+@keyframes blink{0%,80%,100%{opacity:.2}40%{opacity:1}}
+.limit-bar{background:rgba(245,166,35,.08);border-top:1px solid rgba(245,166,35,.2);padding:12px 24px;font-size:13px;color:rgba(238,240,245,.6);display:none;}
+.limit-bar a{color:var(--amber);cursor:pointer;font-weight:700;}
+.chat-input-area{padding:16px 18px;border-top:1px solid var(--border);display:flex;gap:10px;}
+.cinp{flex:1;background:var(--ink4);border:1px solid var(--border);border-radius:11px;padding:13px 18px;color:var(--cream);font-family:var(--font-body);font-size:14px;outline:none;transition:border-color .2s;}
+.cinp::placeholder{color:rgba(238,240,245,.2);}
+.cinp:focus{border-color:var(--teal);}
+.send{background:var(--teal);border:none;border-radius:11px;padding:13px 22px;color:var(--ink);font-weight:700;font-size:14px;cursor:pointer;font-family:var(--font-body);transition:all .2s;}
+.send:hover{background:var(--teal2);}
+
+/* ===== EXPOSÉ ===== */
+#expose-wrap{padding:90px 72px 60px;background:linear-gradient(180deg,var(--ink) 0%,var(--ink2) 100%);}
+.expose-container{max-width:860px;margin:0 auto;}
+.exp-card{background:var(--ink3);border:1px solid var(--border);border-radius:22px;padding:44px;}
+.egrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+.efull{margin-bottom:16px;}
+.elabel{display:block;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(238,240,245,.35);margin-bottom:7px;}
+.einp,.esel,.etxt{width:100%;background:var(--ink4);border:1px solid rgba(0,201,177,.15);border-radius:11px;padding:13px 16px;color:var(--cream);font-family:var(--font-body);font-size:14px;outline:none;transition:border-color .2s;}
+.einp::placeholder,.etxt::placeholder{color:rgba(238,240,245,.2);}
+.einp:focus,.esel:focus,.etxt:focus{border-color:var(--teal);}
+.esel option{background:var(--ink3);}
+.etxt{resize:vertical;min-height:80px;}
+.genbtn{width:100%;padding:17px;background:var(--teal);color:var(--ink);border:none;border-radius:13px;font-weight:700;font-size:16px;cursor:pointer;font-family:var(--font-body);transition:all .25s;margin-top:8px;letter-spacing:.3px;}
+.genbtn:hover{background:var(--teal2);transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,201,177,.35);}
+.genbtn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+.exp-result{background:var(--ink3);border:1px solid var(--border);border-radius:22px;padding:44px;margin-top:28px;display:none;}
+.exp-result h2{font-family:var(--font-head);font-size:30px;font-weight:900;color:var(--white);margin-bottom:6px;}
+.exp-meta-line{font-size:13px;color:rgba(238,240,245,.35);margin-bottom:32px;}
+.exp-sec{margin-bottom:28px;}
+.exp-sec h3{font-family:var(--font-head);font-size:20px;color:var(--teal);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+.exp-sec p,.exp-sec ul{font-size:14px;line-height:1.8;color:rgba(238,240,245,.7);}
+.exp-sec ul{padding-left:18px;}
+.exp-sec ul li{margin-bottom:5px;}
+.exp-btns{display:flex;gap:12px;margin-top:28px;}
+.exbtn{padding:12px 28px;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font-body);transition:all .2s;border:none;}
+.exbtn-p{background:var(--teal);color:var(--ink);}
+.exbtn-p:hover{background:var(--teal2);}
+.exbtn-s{background:transparent;border:1px solid var(--border)!important;color:var(--cream);}
+.exbtn-s:hover{border-color:var(--teal)!important;color:var(--teal);}
+
+/* ===== FILES ===== */
+#files-wrap{padding:90px 72px 60px;background:linear-gradient(180deg,var(--ink) 0%,var(--ink2) 100%);}
+.files-container{max-width:860px;margin:0 auto;}
+.dropzone{border:2px dashed rgba(0,201,177,.25);border-radius:22px;padding:64px 40px;text-align:center;background:rgba(15,21,38,.5);cursor:pointer;transition:all .25s;margin-bottom:28px;}
+.dropzone:hover,.dropzone.drag{border-color:var(--teal);background:rgba(0,201,177,.05);}
+.dz-icon{font-size:52px;margin-bottom:16px;}
+.dz-title{font-family:var(--font-head);font-size:24px;font-weight:700;color:var(--white);margin-bottom:8px;}
+.dz-sub{font-size:14px;color:rgba(238,240,245,.35);margin-bottom:22px;}
+.dz-btn{padding:12px 30px;background:var(--teal);color:var(--ink);border:none;border-radius:9px;font-weight:700;font-size:14px;cursor:pointer;font-family:var(--font-body);transition:all .2s;}
+.dz-btn:hover{background:var(--teal2);}
+.file-items{display:flex;flex-direction:column;gap:12px;}
+.fitem{background:var(--ink3);border:1px solid var(--border);border-radius:14px;padding:18px 22px;display:flex;align-items:center;gap:14px;}
+.fitem-icon{font-size:26px;}
+.fitem-info{flex:1;}
+.fitem-name{font-size:15px;font-weight:700;color:var(--white);}
+.fitem-meta{font-size:12px;color:rgba(238,240,245,.35);margin-top:3px;}
+.fitem-btns{display:flex;gap:8px;}
+.fask{padding:8px 16px;background:rgba(0,201,177,.1);border:1px solid rgba(0,201,177,.2);color:var(--teal);border-radius:8px;font-size:12px;cursor:pointer;font-family:var(--font-body);font-weight:700;transition:all .2s;}
+.fask:hover{background:rgba(0,201,177,.2);}
+.fdel{padding:8px 12px;background:rgba(255,107,107,.08);border:1px solid rgba(255,107,107,.18);color:#FF6B6B;border-radius:8px;font-size:12px;cursor:pointer;font-family:var(--font-body);transition:all .2s;}
+.fdel:hover{background:rgba(255,107,107,.18);}
+
+/* ===== SUBSCRIPTION ===== */
+#sub-wrap{padding:90px 72px 80px;background:linear-gradient(180deg,var(--ink) 0%,var(--ink2) 100%);}
+.plans-row{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:1020px;margin:0 auto;}
+.plan{background:var(--ink3);border:1px solid var(--border);border-radius:22px;padding:40px 34px;position:relative;transition:all .3s;}
+.plan:hover{transform:translateY(-6px);}
+.plan.best{border-color:var(--teal);background:var(--ink4);}
+.pbadge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--teal);color:var(--ink);padding:5px 20px;border-radius:100px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;}
+.pname{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--teal);font-weight:700;margin-bottom:12px;}
+.pprice{font-family:var(--font-head);font-size:50px;font-weight:900;color:var(--white);line-height:1;margin-bottom:4px;}
+.pprice span{font-family:var(--font-body);font-size:16px;font-weight:400;color:rgba(238,240,245,.35);}
+.pper{font-size:13px;color:rgba(238,240,245,.3);margin-bottom:24px;}
+.pfeats{list-style:none;margin-bottom:32px;}
+.pfeats li{display:flex;align-items:flex-start;gap:9px;font-size:14px;color:rgba(238,240,245,.65);padding:8px 0;border-bottom:1px solid rgba(238,240,245,.05);}
+.pfeats li:last-child{border:none;}
+.yes{color:var(--teal);}
+.no{color:rgba(238,240,245,.15);}
+.pcta{width:100%;padding:14px;border-radius:11px;font-weight:700;font-size:14px;cursor:pointer;font-family:var(--font-body);transition:all .2s;border:none;letter-spacing:.3px;}
+.pcta-g{background:var(--teal);color:var(--ink);}
+.pcta-g:hover{background:var(--teal2);}
+.pcta-o{background:transparent;border:1px solid var(--border)!important;color:var(--cream);}
+.pcta-o:hover{border-color:var(--teal)!important;color:var(--teal);}
+
+/* CCP MODAL */
+.ccp-modal-bg{display:none;position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.92);backdrop-filter:blur(14px);align-items:center;justify-content:center;}
+.ccp-modal-bg.open{display:flex;}
+.ccp-box{background:var(--ink2);border:1px solid var(--border);border-radius:24px;padding:50px 46px;max-width:520px;width:95%;position:relative;animation:popIn .35s cubic-bezier(.23,1,.32,1);}
+.ccp-box h2{font-family:var(--font-head);font-size:27px;font-weight:900;color:var(--white);margin-bottom:8px;}
+.ccp-box p{font-size:14px;color:rgba(238,240,245,.4);margin-bottom:24px;line-height:1.6;}
+.ccp-plan-pill{display:inline-block;background:rgba(0,201,177,.1);border:1px solid rgba(0,201,177,.25);color:var(--teal);padding:6px 18px;border-radius:100px;font-size:13px;font-weight:700;margin-bottom:26px;}
+.ccp-card{background:var(--ink3);border:1px solid rgba(0,201,177,.25);border-radius:16px;padding:28px;margin-bottom:24px;}
+.ccp-l{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--teal);font-weight:700;margin-bottom:8px;}
+.ccp-n{font-family:var(--font-head);font-size:17px;letter-spacing:1.5px;color:var(--white);margin-bottom:5px;font-weight:700;word-break:break-all;}
+.ccp-k{font-size:13px;color:rgba(238,240,245,.4);}
+.ccp-o{font-size:12px;color:rgba(238,240,245,.3);margin-top:4px;}
+.steps{margin-bottom:24px;}
+.step{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid rgba(238,240,245,.05);font-size:14px;color:rgba(238,240,245,.6);line-height:1.5;}
+.sn{width:24px;height:24px;background:var(--teal);color:var(--ink);border-radius:50%;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.minp{width:100%;background:var(--ink3);border:1px solid rgba(0,201,177,.15);border-radius:10px;padding:13px 16px;color:var(--cream);font-family:var(--font-body);font-size:14px;outline:none;transition:border-color .2s;margin-bottom:12px;}
+.minp::placeholder{color:rgba(238,240,245,.2);}
+.minp:focus{border-color:var(--teal);}
+.msub{width:100%;padding:15px;background:var(--teal);color:var(--ink);border:none;border-radius:11px;font-weight:700;font-size:15px;cursor:pointer;font-family:var(--font-body);transition:all .2s;}
+.msub:hover{background:var(--teal2);transform:translateY(-1px);}
+.mnote{font-size:12px;color:rgba(238,240,245,.25);text-align:center;margin-top:10px;}
+.success-box{text-align:center;}
+
+/* ===== ADMIN ===== */
+#admin-wrap{padding:100px 72px 60px;background:linear-gradient(180deg,var(--ink) 0%,var(--ink2) 100%);}
+.admin-login{max-width:420px;margin:0 auto;background:var(--ink3);border:1px solid var(--border);border-radius:20px;padding:44px;}
+.admin-login h2{font-family:var(--font-head);font-size:26px;font-weight:900;color:var(--white);margin-bottom:8px;}
+.admin-login p{font-size:14px;color:rgba(238,240,245,.35);margin-bottom:28px;}
+.adash{display:none;}
+.adash-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:36px;flex-wrap:wrap;gap:14px;}
+.adash-title{font-family:var(--font-head);font-size:32px;font-weight:900;color:var(--white);}
+.adash-email{font-size:13px;color:var(--teal);margin-top:4px;font-weight:700;}
+.adm-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px;}
+.ast{background:var(--ink3);border:1px solid var(--border);border-radius:16px;padding:26px;}
+.ast-num{font-family:var(--font-head);font-size:38px;font-weight:900;color:var(--teal);}
+.ast-lbl{font-size:12px;color:rgba(238,240,245,.35);margin-top:4px;font-weight:700;}
+.adm-tabs{display:flex;background:var(--ink3);border:1px solid var(--border);border-radius:12px;padding:4px;margin-bottom:24px;}
+.adm-tab{flex:1;padding:10px;text-align:center;font-size:13px;font-weight:700;cursor:pointer;border-radius:8px;color:rgba(238,240,245,.4);transition:all .2s;}
+.adm-tab.active{background:var(--teal);color:var(--ink);}
+.adm-panel{display:none;}
+.adm-panel.active{display:block;}
+.tbl-wrap{background:var(--ink3);border:1px solid var(--border);border-radius:16px;overflow:hidden;}
+.tbl-hd{padding:18px 24px;border-bottom:1px solid var(--border);font-size:14px;font-weight:700;color:var(--white);}
+table{width:100%;border-collapse:collapse;}
+th{padding:11px 16px;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(238,240,245,.25);font-weight:700;background:rgba(5,8,14,.3);text-align:left;}
+td{padding:13px 16px;font-size:13px;color:rgba(238,240,245,.65);border-top:1px solid rgba(238,240,245,.04);}
+.bdg{padding:4px 11px;border-radius:100px;font-size:11px;font-weight:700;}
+.b-a{background:rgba(0,201,177,.12);color:var(--teal);}
+.b-p{background:rgba(245,166,35,.12);color:var(--amber);}
+.b-e{background:rgba(255,107,107,.12);color:#FF6B6B;}
+.appbtn{padding:5px 12px;background:rgba(0,201,177,.1);border:1px solid rgba(0,201,177,.2);color:var(--teal);border-radius:6px;font-size:11px;cursor:pointer;font-family:var(--font-body);font-weight:700;transition:all .2s;}
+.appbtn:hover{background:rgba(0,201,177,.2);}
+.receipt-thumb{max-width:80px;border-radius:6px;border:1px solid var(--border);}
+
+/* TOAST */
+#toast{position:fixed;bottom:30px;right:30px;z-index:9999;background:var(--ink3);border:1px solid var(--border);border-radius:12px;padding:14px 24px;font-size:14px;font-weight:600;color:var(--cream);display:none;animation:fadeUp .3s ease;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+#toast.show{display:block;}
+#toast.ok{border-color:rgba(0,201,177,.4);color:var(--teal);}
+#toast.err{border-color:rgba(255,107,107,.3);color:#FF6B6B;}
+
+/* SECTION HEADER */
+.sec-head{text-align:center;margin-bottom:0;}
+
+@media(max-width:900px){
+  nav{padding:14px 20px;}
+  .nav-links{display:none;}
+  .hero-section{padding:100px 20px 60px;}
+  .features-section,.modules-section{padding:60px 20px;}
+  .feat-grid,.modules-grid{grid-template-columns:1fr;}
+  #dashboard,#chat-wrap,#expose-wrap,#files-wrap,#sub-wrap,#admin-wrap{padding:100px 20px 60px;}
+  .dash-cards,.plans-row,.adm-stats{grid-template-columns:1fr 1fr;}
+  .chat-layout{grid-template-columns:1fr;}
+  .egrid{grid-template-columns:1fr;}
+  .stats-strip{gap:32px;flex-wrap:wrap;padding:28px 20px;}
+  .float-cards{display:none;}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur2"></div>
+
+<!-- 3D WebGL Hero Canvas -->
+<canvas id="hero-canvas"></canvas>
+<div class="hero-overlay"></div>
+
+<!-- ══════════════════ NAV ══════════════════ -->
+<nav>
+  <div class="logo" onclick="showPage('home')">
+    <span class="t">ESC</span><span class="sep">·</span><span class="d">IA</span>
+  </div>
+  <div class="nav-links">
+    <a onclick="showPage('home')">Accueil</a>
+    <a onclick="requireAuth('chat-wrap')">Agents IA</a>
+    <a onclick="requireAuth('expose-wrap')">Exposés</a>
+    <a onclick="requireAuth('files-wrap')">Fichiers</a>
+    <a onclick="showPage('sub-wrap')">Abonnements</a>
+  </div>
+  <div class="nav-r">
+    <span class="nlvl" id="nlvl" style="display:none">Prépa</span>
+    <button class="nbtn nbtn-o" id="btn-login" onclick="openAuth()">Connexion</button>
+    <button class="nbtn nbtn-t" id="btn-signup" onclick="openAuth('register')">S'inscrire</button>
+    <button class="nbtn nbtn-o" id="btn-logout" style="display:none" onclick="logout()">Déconnexion</button>
+    <button class="nbtn nbtn-t" id="btn-admin" style="display:none" onclick="showPage('admin-wrap')">⚙ Admin</button>
+  </div>
+</nav>
+
+<!-- ══════════════════ HOME ══════════════════ -->
+<div id="home" class="page active">
+  <section class="hero-section">
+    <div class="hero-eyebrow"><div class="eyebrow-pulse"></div>École Supérieure de Commerce · Algérie</div>
+    <h1 class="hero-h1">
+      La plateforme IA<br>
+      <span class="teal">qui révolutionne</span><br>
+      <span class="it">tes études</span> à l'<span class="am">ESC</span>
+    </h1>
+    <p class="hero-p">11 agents IA experts en Cycle Préparatoire et Master ESC. Posez vos questions, générez vos exposés, analysez vos cours — 24h/24, 7j/7.</p>
+    <div class="hero-ctas">
+      <button class="hcta hcta-p" onclick="openAuth('register')">Commencer Gratuitement →</button>
+      <button class="hcta hcta-s" onclick="scrollTo('#modules')">Découvrir les agents</button>
+    </div>
+
+    <div class="float-cards">
+      <div class="fc fc1">
+        <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="32" height="32"><path d="M3 21L21 3M21 3H8M21 3V16"/></svg></div>
+        <div class="fc-title">Cycle Préparatoire</div>
+        <div class="fc-sub">6 modules, agents spécialisés</div>
+        <div class="fc-tags"><span class="fc-tag">Compta</span><span class="fc-tag">Algèbre</span><span class="fc-tag">Stats</span></div>
+      </div>
+      <div class="fc fc2">
+        <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="32" height="32"><circle cx="12" cy="8" r="3"/><path d="M12 11v2m-4 4h8a2 2 0 002-2v-1a4 4 0 00-8 0v1a2 2 0 002 2z"/><rect x="3" y="13" width="18" height="8" rx="2"/></svg></div>
+        <div class="fc-title">Intelligence Artificielle</div>
+        <div class="fc-sub">Réponses instantanées & pédagogiques</div>
+        <div class="fc-tags"><span class="fc-tag">GPT-4</span><span class="fc-tag">Claude</span><span class="fc-tag">24/7</span></div>
+      </div>
+      <div class="fc fc3">
+        <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="32" height="32"><path d="M12 14l9-5-9-5-9 5 9 5z"/><path d="M12 14l6.16-3.422A12.083 12.083 0 0121 16.5c0 3.037-4.027 5.5-9 5.5s-9-2.463-9-5.5a12.083 12.083 0 012.84-5.922L12 14z"/></svg></div>
+        <div class="fc-title">Master ESC</div>
+        <div class="fc-sub">5 spécialités, contenu académique</div>
+        <div class="fc-tags"><span class="fc-tag">Finance</span><span class="fc-tag">Audit</span><span class="fc-tag">Marketing</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats-strip">
+    <div class="ss-item"><div class="ss-num">11</div><div class="ss-lbl">Agents IA</div></div>
+    <div class="ss-item"><div class="ss-num">2</div><div class="ss-lbl">Niveaux (Prépa + Master)</div></div>
+    <div class="ss-item"><div class="ss-num">6</div><div class="ss-lbl">Spécialités Master</div></div>
+    <div class="ss-item"><div class="ss-num">24/7</div><div class="ss-lbl">Disponibilité</div></div>
+    <div class="ss-item"><div class="ss-num">∞</div><div class="ss-lbl">Questions (Premium)</div></div>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="features-section">
+    <div class="sec-tag">Fonctionnalités</div>
+    <div class="sec-title" style="margin-bottom:14px;">Tout pour réussir<br><span style="color:var(--teal);">à l'ESC</span></div>
+    <div class="sec-sub" style="margin-bottom:60px;">Une plateforme pensée pour les étudiants de l'École Supérieure de Commerce.</div>
+    <div class="feat-grid">
+      <div class="feat-card" onclick="requireAuth('chat-wrap')">
+        <div class="feat-icon">🧠</div>
+        <div class="feat-title">Agents IA Experts</div>
+        <div class="feat-desc">11 agents spécialisés par module. Chaque agent connaît parfaitement son domaine et répond de manière pédagogique.</div>
+      </div>
+      <div class="feat-card" onclick="requireAuth('expose-wrap')">
+        <div class="feat-icon">📝</div>
+        <div class="feat-title">Générateur d'Exposés</div>
+        <div class="feat-desc">Générez des exposés structurés et complets pour n'importe quel module Prépa ou spécialité Master en quelques secondes.</div>
+      </div>
+      <div class="feat-card" onclick="requireAuth('files-wrap')">
+        <div class="feat-icon">📁</div>
+        <div class="feat-title">Import de Cours</div>
+        <div class="feat-desc">Importez vos PDFs, fiches et exercices. Posez des questions directement sur vos documents.</div>
+      </div>
+      <div class="feat-card" onclick="requireAuth('td-wrap')">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" width="28" height="28"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><path d="M9 7h7M9 11h7"/></svg></div>
+        <div class="feat-title">Espace Professeurs</div>
+        <div class="feat-desc">Créez vos séries de TD avec l'aide de l'IA : exercices, corrigés et énoncés pour vos modules en quelques clics.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODULES -->
+  <div id="modules" class="modules-section">
+    <div class="sec-tag" style="text-align:center;margin-bottom:12px;">Nos Agents</div>
+    <div class="sec-title" style="margin-bottom:14px;text-align:center;">Agents par <span style="color:var(--teal)">niveau</span></div>
+    <div class="sec-sub" style="margin-bottom:40px;text-align:center;">Sélectionnez votre niveau pour voir les agents disponibles.</div>
+    <div class="modules-tabs">
+      <div class="mod-tab active" onclick="switchModTab('prepa',this)">📐 Cycle Préparatoire</div>
+      <div class="mod-tab" onclick="switchModTab('master',this)">🎓 Master ESC</div>
+    </div>
+    <div class="module-panel active modules-grid" id="mp-prepa">
+      <div class="mod-card" onclick="openAgentDirect('prepa',0)"><div class="mod-icon mi-teal"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 3v18M3 9h5M3 15h5"/><circle cx="15.5" cy="11.5" r="2.5"/></svg></div><div><div class="mod-name">Comptabilité Générale</div><div class="mod-desc">Écritures, bilan, résultat</div></div></div>
+      <div class="mod-card" onclick="openAgentDirect('prepa',1)"><div class="mod-icon mi-amber"><svg viewBox="0 0 24 24"><path d="M3 17l5-5 4 4 8-8"/><path d="M14 7h7v7"/></svg></div><div><div class="mod-name">Microéconomie</div><div class="mod-desc">Offre, demande, marchés</div></div></div>
+      <div class="mod-card" onclick="openAgentDirect('prepa',2)"><div class="mod-icon mi-violet"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a13 13 0 010 18M12 3a13 13 0 000 18"/></svg></div><div><div class="mod-name">Macroéconomie</div><div class="mod-desc">PIB, inflation, politiques</div></div></div>
+      <div class="mod-card" onclick="openAgentDirect('prepa',3)"><div class="mod-icon mi-rose"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div><div><div class="mod-name">Algèbre</div><div class="mod-desc">Matrices, systèmes, vecteurs</div></div></div>
+      <div class="mod-card" onclick="openAgentDirect('prepa',4)"><div class="mod-icon mi-blue"><svg viewBox="0 0 24 24"><path d="M3 16c3-1 4-9 7-9s2 8 5 8 3-6 6-6"/></svg></div><div><div class="mod-name">Analyse Mathématique</div><div class="mod-desc">Fonctions, limites, intégrales</div></div></div>
+      <div class="mod-card" onclick="openAgentDirect('prepa',5)"><div class="mod-icon mi-green"><svg viewBox="0 0 24 24"><path d="M4 19V10M10 19V5M16 19v-7M21 19H3"/></svg></div><div><div class="mod-name">Probabilités & Statistiques</div><div class="mod-desc">Lois, distributions, tests</div></div></div>
+    </div>
+    <div class="module-panel modules-grid" id="mp-master">
+      <div class="mod-card" onclick="openAgentDirect('master',0)"><div class="mod-icon mi-teal"><svg viewBox="0 0 24 24"><path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 11-5.8-1.6"/></svg></div><div><div class="mod-name">Marketing</div><div class="mod-desc">Mix, études de marché, digital</div></div></div>
+      <div class="mod-card" onclick="openAgentDirect('master',1)"><div class="mod-icon mi-amber"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V10l7-6 7 6v11M9 21v-6h6v6"/></svg></div><div><div class="mod-name">Banque & Monnaie</div><div class="mod-desc">Crédit, politique monétaire</div></div></div>
+      <div class="mod-card" onclick="openAgentDirect('master',2)"><div class="mod-icon mi-violet"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div><div><div class="mod-name">Audit</div><div class="mod-desc">Contrôle interne, normes ISA</div></div></div>
+      <div class="mod-card" onclick="openAgentDirect('master',3)"><div class="mod-icon mi-rose"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 4 6 4 9s-1.5 6.4-4 9c-2.5-2.6-4-6-4-9s1.5-6.4 4-9z"/></svg></div><div><div class="mod-name">Commerce International</div><div class="mod-desc">Incoterms, export, douane</div></div></div>
+      <div class="mod-card" onclick="openAgentDirect('master',4)"><div class="mod-icon mi-blue"><svg viewBox="0 0 24 24"><path d="M3 17l5-5 4 4 8-8"/><path d="M14 7h7v7"/></svg></div><div><div class="mod-name">Finance</div><div class="mod-desc">Analyse financière, VAN, TRI</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ DASHBOARD ══════════════════ -->
+<div id="dashboard" class="page">
+  <div class="dash-top">
+    <div>
+      <div class="dash-greeting">Bonjour, <span id="dname">Étudiant</span> 👋</div>
+      <div class="dash-meta" id="dmeta">Cycle Préparatoire</div>
+    </div>
+    <button class="lout" onclick="logout()">Déconnexion</button>
+  </div>
+  <div class="dash-cards">
+    <div class="dcard" onclick="showPage('chat-wrap')"><div class="dcard-icon">🤖</div><div class="dcard-title">Agents IA</div><div class="dcard-desc">Posez vos questions aux agents spécialisés.</div><div class="dcard-arrow">↗</div></div>
+    <div class="dcard" onclick="showPage('expose-wrap')"><div class="dcard-icon">📝</div><div class="dcard-title">Générer un Exposé</div><div class="dcard-desc">Créez un exposé complet et structuré.</div><div class="dcard-arrow">↗</div></div>
+    <div class="dcard" onclick="showPage('files-wrap')"><div class="dcard-icon">📁</div><div class="dcard-title">Mes Fichiers</div><div class="dcard-desc">Importez et gérez vos cours et TD.</div><div class="dcard-arrow">↗</div></div>
+    <div class="dcard" onclick="showPage('sub-wrap')"><div class="dcard-icon">⭐</div><div class="dcard-title">Abonnement</div><div class="dcard-desc" id="dsub">Plan gratuit · 3 questions/jour</div><div class="dcard-arrow">↗</div></div>
+    <div class="dcard" style="grid-column:span 2" onclick="showPage('home')"><div class="dcard-icon">🏠</div><div class="dcard-title">Accueil</div><div class="dcard-desc">Retour à la page principale.</div><div class="dcard-arrow">↗</div></div>
+  </div>
+</div>
+
+<!-- ══════════════════ CHAT ══════════════════ -->
+<div id="chat-wrap" class="page">
+  <div style="text-align:center;margin-bottom:40px;">
+    <div class="sec-tag">Intelligence Artificielle</div>
+    <div style="font-family:var(--font-head);font-size:42px;font-weight:900;color:var(--white);margin-bottom:10px;">Agents IA <span style="color:var(--teal)">ESC</span></div>
+    <div style="font-size:15px;color:rgba(238,240,245,.4);">Choisissez votre niveau et votre module.</div>
+  </div>
+  <div class="chat-layout">
+    <div class="agents-sidebar">
+      <div class="sb-title">Niveau</div>
+      <div class="sb-sub">Votre cycle d'études</div>
+      <div class="lvl-btns">
+        <button class="lvl-btn active" onclick="swLevel('prepa',this)">📐 Cycle Préparatoire</button>
+        <button class="lvl-btn" onclick="swLevel('master',this)">🎓 Master ESC</button>
+      </div>
+      <div class="ag-list" id="ag-list"></div>
+    </div>
+    <div class="chat-main">
+      <div class="chat-header">
+        <div class="ch-av" id="c-av">📒</div>
+        <div><div class="ch-name" id="c-name">Agent Comptabilité</div><div class="ch-desc" id="c-desc">Cycle Préparatoire</div></div>
+      </div>
+      <div class="chat-messages" id="chat-msgs"></div>
+      <div class="limit-bar" id="limit-bar">⚠️ Limite gratuite atteinte (3 questions). <a onclick="showPage('sub-wrap')">S'abonner →</a></div>
+      <div class="chat-input-area">
+        <input class="cinp" id="cinp" placeholder="Posez votre question ici…" onkeydown="if(event.key==='Enter')sendChat()">
+        <button class="send" onclick="sendChat()">Envoyer →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ EXPOSÉ ══════════════════ -->
+<div id="expose-wrap" class="page">
+  <div style="text-align:center;margin-bottom:48px;">
+    <div class="sec-tag">Générateur IA</div>
+    <div style="font-family:var(--font-head);font-size:44px;font-weight:900;color:var(--white);margin-bottom:10px;">Créer un <span style="color:var(--teal)">Exposé</span></div>
+    <div style="font-size:15px;color:rgba(238,240,245,.4);">Exposés académiques complets générés par IA.</div>
+  </div>
+  <div class="expose-container">
+    <div class="exp-card">
+      <div class="egrid">
+        <div><label class="elabel">Niveau</label><select class="esel" id="elevel" onchange="updExpMod()"><option value="prepa">Cycle Préparatoire</option><option value="master">Master ESC</option></select></div>
+        <div><label class="elabel">Module</label><select class="esel" id="emod"></select></div>
+      </div>
+      <div class="efull"><label class="elabel">Titre / Sujet</label><input class="einp" id="etitle" placeholder="Ex: L'analyse du bilan comptable, La politique monétaire…"></div>
+      <div class="egrid">
+        <div><label class="elabel">Longueur</label><select class="esel" id="epages"><option>5 pages</option><option>8 pages</option><option selected>10 pages</option><option>15 pages</option></select></div>
+        <div><label class="elabel">Langue</label><select class="esel" id="elang"><option value="fr">Français</option><option value="ar">Arabe</option><option value="en">Anglais</option></select></div>
+      </div>
+      <div class="efull"><label class="elabel">Instructions supplémentaires</label><textarea class="etxt" id="enotes" placeholder="Exemples algériens, théoriciens à citer, étude de cas…"></textarea></div>
+      <button class="genbtn" id="genbtn" onclick="genExpose()">✨ Générer l'Exposé</button>
+    </div>
+    <div class="exp-result" id="exp-result">
+      <h2 id="res-title"></h2><div class="exp-meta-line" id="res-meta"></div>
+      <div id="res-body"></div>
+      <div class="exp-btns">
+        <button class="exbtn exbtn-p" onclick="copyExp()">📋 Copier</button>
+        <button class="exbtn exbtn-s" onclick="document.getElementById('exp-result').style.display='none'">✕ Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ FILES ══════════════════ -->
+<div id="files-wrap" class="page">
+  <div style="text-align:center;margin-bottom:48px;">
+    <div class="sec-tag">Mes Documents</div>
+    <div style="font-family:var(--font-head);font-size:44px;font-weight:900;color:var(--white);margin-bottom:10px;">Importer des <span style="color:var(--teal)">Fichiers</span></div>
+    <div style="font-size:15px;color:rgba(238,240,245,.4);">PDF, Word, images · Les agents peuvent analyser vos fichiers.</div>
+  </div>
+  <div class="files-container">
+    <div class="dropzone" id="dropzone" onclick="document.getElementById('finp').click()" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="dropFiles(event)">
+      <div class="dz-icon">📤</div>
+      <div class="dz-title">Glissez vos fichiers ici</div>
+      <div class="dz-sub">PDF, Word, images · Max 20 MB par fichier</div>
+      <button class="dz-btn" onclick="event.stopPropagation();document.getElementById('finp').click()">Choisir des fichiers</button>
+    </div>
+    <input type="file" id="finp" multiple accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.txt" onchange="handleFiles(this.files)" style="display:none">
+    <div class="file-items" id="file-items"></div>
+  </div>
+</div>
+
+<!-- ══════════════════ SUBSCRIPTION ══════════════════ -->
+<div id="sub-wrap" class="page">
+  <div style="text-align:center;margin-bottom:60px;">
+    <div class="sec-tag">Abonnements</div>
+    <div style="font-family:var(--font-head);font-size:44px;font-weight:900;color:var(--white);margin-bottom:12px;">Choisissez votre <span style="color:var(--teal)">Formule</span></div>
+    <div style="font-size:15px;color:rgba(238,240,245,.4);">Paiement par CCP Algérie · Activation sous 24h par l'admin</div>
+  </div>
+  <div class="plans-row">
+    <div class="plan">
+      <div class="pname">Gratuit</div>
+      <div class="pprice">0 <span>DA</span></div>
+      <div class="pper">Pour toujours</div>
+      <ul class="pfeats">
+        <li><span class="yes">✓</span> 3 questions/jour</li>
+        <li><span class="yes">✓</span> 2 agents disponibles</li>
+        <li><span class="no">✗</span> Générateur d'exposés</li>
+        <li><span class="no">✗</span> Import de fichiers</li>
+        <li><span class="no">✗</span> Agents Master ESC</li>
+      </ul>
+      <button class="pcta pcta-o" onclick="openAuth()">Commencer</button>
+    </div>
+    <div class="plan best">
+      <div class="pbadge">⭐ POPULAIRE</div>
+      <div class="pname">Étudiant</div>
+      <div class="pprice">800 <span>DA</span></div>
+      <div class="pper">par mois</div>
+      <ul class="pfeats">
+        <li><span class="yes">✓</span> Questions illimitées</li>
+        <li><span class="yes">✓</span> Tous les agents Prépa (6)</li>
+        <li><span class="yes">✓</span> Générateur d'exposés</li>
+        <li><span class="yes">✓</span> Import fichiers (5 Go)</li>
+        <li><span class="no">✗</span> Agents Master ESC</li>
+      </ul>
+      <button class="pcta pcta-g" onclick="openPay('Étudiant','800')">S'abonner · 800 DA/mois</button>
+    </div>
+    <div class="plan">
+      <div class="pname">Premium ESC</div>
+      <div class="pprice">1500 <span>DA</span></div>
+      <div class="pper">par mois</div>
+      <ul class="pfeats">
+        <li><span class="yes">✓</span> Questions illimitées</li>
+        <li><span class="yes">✓</span> Tous les agents Prépa + Master</li>
+        <li><span class="yes">✓</span> Générateur d'exposés avancé</li>
+        <li><span class="yes">✓</span> Import fichiers illimité</li>
+        <li><span class="yes">✓</span> Support prioritaire</li>
+      </ul>
+      <button class="pcta pcta-o" onclick="openPay('Premium ESC','1500')">S'abonner · 1500 DA/mois</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ ADMIN ══════════════════ -->
+<div id="admin-wrap" class="page">
+  <div style="margin-bottom:40px;">
+    <div class="sec-tag">Administration</div>
+    <div style="font-family:var(--font-head);font-size:44px;font-weight:900;color:var(--white);">Espace <span style="color:var(--teal)">Admin</span></div>
+  </div>
+  <div class="admin-login" id="adm-login">
+    <h2>🔐 Connexion Admin</h2>
+    <p>Réservé à l'administrateur de la plateforme ESC·IA.</p>
+    <div class="field"><label>Email</label><input type="email" id="ae" class="inp" placeholder="heebuchhhmoh@icloud.com"></div>
+    <div class="field"><label>Mot de passe</label><input type="password" id="ap" class="inp" placeholder="••••••••"></div>
+    <button class="abtn" onclick="adminLogin()">Accéder au tableau de bord</button>
+    <div id="aerr" style="color:#FF6B6B;font-size:13px;text-align:center;margin-top:10px;display:none;">Identifiants incorrects.</div>
+  </div>
+  <div class="adash" id="adash">
+    <div class="adash-top">
+      <div><div class="adash-title">Tableau de bord</div><div class="adash-email">heebuchhhmoh@icloud.com</div></div>
+      <button class="lout" onclick="adminOut()">Déconnexion Admin</button>
+    </div>
+    <div class="adm-stats">
+      <div class="ast"><div class="ast-num" id="sU">0</div><div class="ast-lbl">Utilisateurs</div></div>
+      <div class="ast"><div class="ast-num" id="sA">0</div><div class="ast-lbl">Abonnés actifs</div></div>
+      <div class="ast"><div class="ast-num" id="sP">0</div><div class="ast-lbl">En attente</div></div>
+      <div class="ast"><div class="ast-num" id="sR">0 DA</div><div class="ast-lbl">Revenus ce mois</div></div>
+    </div>
+    <div class="adm-tabs">
+      <div class="adm-tab active" onclick="swAdm('pay',this)">💳 Demandes CCP</div>
+      <div class="adm-tab" onclick="swAdm('users',this)">👥 Utilisateurs</div>
+      <div class="adm-tab" onclick="swAdm('receipts',this)">🖼 Reçus uploadés</div>
+    </div>
+    <div class="adm-panel active" id="adm-pay">
+      <div class="tbl-wrap"><div class="tbl-hd">Demandes de paiement CCP</div>
+      <table><thead><tr><th>Nom</th><th>Email</th><th>Plan</th><th>Montant</th><th>Reçu CCP</th><th>Statut</th><th>Date</th><th>Action</th></tr></thead>
+      <tbody id="pay-tbody"></tbody></table></div>
+    </div>
+    <div class="adm-panel" id="adm-users">
+      <div class="tbl-wrap"><div class="tbl-hd">Utilisateurs inscrits</div>
+      <table><thead><tr><th>Nom</th><th>Email</th><th>Niveau</th><th>Spécialité</th><th>Plan</th><th>Inscription</th></tr></thead>
+      <tbody id="users-tbody"></tbody></table></div>
+    </div>
+    <div class="adm-panel" id="adm-receipts">
+      <div class="tbl-wrap"><div class="tbl-hd">Photos de reçus CCP</div>
+      <table><thead><tr><th>Nom</th><th>Plan</th><th>Reçu</th><th>Date</th><th>Action</th></tr></thead>
+      <tbody id="receipts-tbody"></tbody></table></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ AUTH MODAL ══════════ -->
+<div class="modal-bg" id="auth-modal">
+  <div class="auth-box">
+    <button class="mclose" onclick="closeAuth()">✕</button>
+    <div class="auth-tabs">
+      <div class="atab active" id="tab-l" onclick="swAuth('login')">Connexion</div>
+      <div class="atab" id="tab-r" onclick="swAuth('register')">S'inscrire</div>
+    </div>
+    <div class="aform active" id="f-login">
+      <div class="atitle">Bon retour 👋</div>
+      <div class="asub">Connectez-vous à votre compte.</div>
+      <div class="field"><label>Email</label><input type="email" id="l-e" class="inp" placeholder="votre@email.com"></div>
+      <div class="field"><label>Mot de passe</label><input type="password" id="l-p" class="inp" placeholder="••••••••"></div>
+      <button class="abtn" onclick="doLogin()">Se connecter</button>
+      <div class="aerr" id="l-err">Email ou mot de passe incorrect.</div>
+    </div>
+    <div class="aform" id="f-register">
+      <div class="atitle">Créer un compte</div>
+      <div class="asub">Rejoignez ESC·IA gratuitement.</div>
+      <div class="field"><label>Nom complet</label><input type="text" id="r-n" class="inp" placeholder="Mohamed Benali"></div>
+      <div class="field"><label>Email</label><input type="email" id="r-e" class="inp" placeholder="votre@email.com"></div>
+      <div class="field"><label>Mot de passe</label><input type="password" id="r-p" class="inp" placeholder="6 caractères minimum"></div>
+      <div class="field"><label>Niveau</label>
+        <select id="r-l" class="inp" onchange="updRegSpec()">
+          <option value="prepa1">Cycle Prépa · 1ère Année</option>
+          <option value="prepa2">Cycle Prépa · 2ème Année</option>
+          <option value="master">Master ESC</option>
+        </select>
+      </div>
+      <div class="field" id="spec-wrap" style="display:none"><label>Spécialité Master</label>
+        <select id="r-s" class="inp">
+          <option>Marketing</option><option>Banque & Monnaie</option>
+          <option>Audit</option><option>Commerce International</option><option>Finance</option>
+        </select>
+      </div>
+      <button class="abtn" onclick="doRegister()">Créer mon compte</button>
+      <div class="aerr" id="r-err">Remplissez tous les champs.</div>
+      <div class="aok" id="r-ok">✓ Compte créé !</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ CCP MODAL ══════════ -->
+<div class="ccp-modal-bg" id="pay-modal">
+  <div class="ccp-box">
+    <button class="mclose" onclick="closePay()">✕</button>
+    <h2>💳 Paiement CCP</h2>
+    <p>Effectuez un virement CCP et envoyez votre reçu pour activer votre abonnement.</p>
+    <div class="ccp-plan-pill" id="pay-pill">Formule Étudiant · 800 DA/mois</div>
+    <div class="ccp-card">
+      <div class="ccp-l">Numéro CCP (bénéficiaire)</div>
+      <div class="ccp-n">00799999004453951340</div>
+      <div class="ccp-k">Clé CCP : <strong style="color:var(--teal)">40</strong></div>
+      <div class="ccp-o">Titulaire : ESC·IA Platform — Hiba</div>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="sn">1</div>Effectuez un virement de <strong id="pay-amount" style="color:var(--teal);margin:0 4px">800 DA</strong> sur le CCP ci-dessus.</div>
+      <div class="step"><div class="sn">2</div>Notez le numéro de reçu fourni par La Poste Algérie.</div>
+      <div class="step"><div class="sn">3</div>Remplissez le formulaire ci-dessous et uploadez une photo de votre reçu.</div>
+      <div class="step"><div class="sn">4</div>L'admin activera votre accès sous 24h après vérification.</div>
+    </div>
+    <input class="minp" id="pn" placeholder="Votre nom complet">
+    <input class="minp" id="pe" type="email" placeholder="Votre email">
+    <input class="minp" id="pc" placeholder="Numéro de reçu CCP (ex: 1234567890)">
+    <div style="margin-bottom:14px;">
+      <label style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(238,240,245,.35);display:block;margin-bottom:7px;">Photo du reçu (optionnel)</label>
+      <input type="file" id="pr" accept="image/*,.pdf" style="color:rgba(238,240,245,.5);font-size:13px;width:100%;">
+    </div>
+    <button class="msub" onclick="submitPay()">📨 Envoyer ma demande</button>
+    <div class="mnote">Activation sous 24h après vérification du paiement.</div>
+  </div>
+</div>
+
+<!-- SUCCESS MODAL -->
+<div class="ccp-modal-bg" id="ok-modal">
+  <div class="ccp-box success-box">
+    <div style="font-size:56px;margin-bottom:18px">✅</div>
+    <h2 style="font-family:var(--font-head);font-size:28px;font-weight:900;color:var(--white);margin-bottom:12px">Demande envoyée !</h2>
+    <p style="font-size:15px;color:rgba(238,240,245,.5);line-height:1.7;margin-bottom:28px">Votre demande d'abonnement a été reçue par l'admin. Votre compte sera activé sous 24h après vérification du virement CCP.</p>
+    <button class="msub" onclick="document.getElementById('ok-modal').classList.remove('open')">Fermer</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<!-- ══════════════════ SCRIPTS ══════════════════ -->
+<script>
+/* ──── CURSOR ──── */
+const cur=document.getElementById('cur'),cur2=document.getElementById('cur2');
+let mx=0,my=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  cur.style.left=mx+'px';cur.style.top=my+'px';
+  setTimeout(()=>{cur2.style.left=mx+'px';cur2.style.top=my+'px';},60);
+});
+document.querySelectorAll('button,a,[onclick],.feat-card,.dcard,.mod-card,.ag-item,.plan,.fc').forEach(el=>{
+  el.addEventListener('mouseenter',()=>cur.style.transform='translate(-50%,-50%) scale(2.2)');
+  el.addEventListener('mouseleave',()=>cur.style.transform='translate(-50%,-50%) scale(1)');
+});
+
+/* ──── 3D WEBGL HERO ──── */
+(function(){
+  const cv=document.getElementById('hero-canvas');
+  const gl=cv.getContext('webgl')||cv.getContext('experimental-webgl');
+  if(!gl){return;}
+  function rs(){cv.width=innerWidth;cv.height=innerHeight;gl.viewport(0,0,cv.width,cv.height);}
+  rs();window.addEventListener('resize',rs);
+
+  const vsrc=`attribute vec3 aPos;attribute vec3 aCol;attribute float aSz;uniform mat4 uProj;uniform mat4 uView;varying vec3 vCol;varying float vDist;void main(){vec4 mv=uView*vec4(aPos,1.);gl_Position=uProj*mv;gl_PointSize=aSz*(400./-mv.z);vCol=aCol;vDist=-mv.z;}`;
+  const fsrc=`precision mediump float;varying vec3 vCol;varying float vDist;void main(){float d=length(gl_PointCoord-.5)*2.;if(d>1.)discard;float a=(1.-d)*.85;gl_FragColor=vec4(vCol,a*(1.-vDist/40.));}`;
+
+  function sh(type,src){const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);return s;}
+  const prog=gl.createProgram();gl.attachShader(prog,sh(gl.VERTEX_SHADER,vsrc));gl.attachShader(prog,sh(gl.FRAGMENT_SHADER,fsrc));gl.linkProgram(prog);gl.useProgram(prog);
+
+  const N=300;
+  const pos=new Float32Array(N*3),col=new Float32Array(N*3),sz=new Float32Array(N);
+  const vel=new Float32Array(N*3);
+  for(let i=0;i<N;i++){
+    pos[i*3]=(Math.random()-0.5)*30;pos[i*3+1]=(Math.random()-0.5)*20;pos[i*3+2]=(Math.random()-.5)*20;
+    vel[i*3]=(Math.random()-.5)*.02;vel[i*3+1]=(Math.random()-.5)*.015;vel[i*3+2]=(Math.random()-.5)*.01;
+    const t=Math.random();
+    if(t<.45){col[i*3]=0;col[i*3+1]=.78;col[i*3+2]=.69;}       // teal
+    else if(t<.7){col[i*3]=.96;col[i*3+1]=.65;col[i*3+2]=.14;}  // amber
+    else if(t<.85){col[i*3]=.55;col[i*3+1]=.44;col[i*3+2]=1;}   // violet
+    else{col[i*3]=.1;col[i*3+1]=.1;col[i*3+2]=.25;}
+    sz[i]=Math.random()*4+1.5;
+  }
+  const pBuf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,pBuf);gl.bufferData(gl.ARRAY_BUFFER,pos,gl.DYNAMIC_DRAW);
+  const cBuf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,cBuf);gl.bufferData(gl.ARRAY_BUFFER,col,gl.STATIC_DRAW);
+  const sBuf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,sBuf);gl.bufferData(gl.ARRAY_BUFFER,sz,gl.STATIC_DRAW);
+
+  const aPos=gl.getAttribLocation(prog,'aPos'),aCol=gl.getAttribLocation(prog,'aCol'),aSz=gl.getAttribLocation(prog,'aSz');
+  const uProj=gl.getUniformLocation(prog,'uProj'),uView=gl.getUniformLocation(prog,'uView');
+
+  function persp(fov,asp,n,f){const t=Math.tan(fov/2);return[1/(asp*t),0,0,0,0,1/t,0,0,0,0,-(f+n)/(f-n),-1,0,0,-2*f*n/(f-n),0];}
+  function look(ex,ey,ez,cx,cy,cz){const fz=Math.sqrt((cx-ex)**2+(cy-ey)**2+(cz-ez)**2),fx=(cx-ex)/fz,fy=(cy-ey)/fz,fv=(cz-ez)/fz;const ux=0,uy=1,uz=0;const rx=fy*uz-fv*uy,ry=fv*ux-fx*uz,rz=fx*uy-fy*ux;const rl=Math.sqrt(rx*rx+ry*ry+rz*rz);const rnx=rx/rl,rny=ry/rl,rnz=rz/rl;const ux2=rny*fv-rnz*fy,uy2=rnz*fx-rnx*fv,uz2=rnx*fy-rny*fx;return[rnx,ux2,-fx,0,rny,uy2,-fy,0,rnz,uz2,-fv,0,-(rnx*ex+rny*ey+rnz*ez),-(ux2*ex+uy2*ey+uz2*ez),fx*ex+fy*ey+fv*ez,1];}
+
+  let t0=0,mxn=0,myn=0;
+  document.addEventListener('mousemove',e=>{mxn=(e.clientX/innerWidth-.5)*2;myn=-(e.clientY/innerHeight-.5)*2;});
+
+  function frame(ts){
+    if(!t0)t0=ts;const dt=(ts-t0)/1000;t0=ts;
+    for(let i=0;i<N;i++){
+      pos[i*3]+=vel[i*3];pos[i*3+1]+=vel[i*3+1];pos[i*3+2]+=vel[i*3+2];
+      if(Math.abs(pos[i*3])>15)vel[i*3]*=-1;
+      if(Math.abs(pos[i*3+1])>10)vel[i*3+1]*=-1;
+      if(Math.abs(pos[i*3+2])>10)vel[i*3+2]*=-1;
+    }
+    gl.bindBuffer(gl.ARRAY_BUFFER,pBuf);gl.bufferData(gl.ARRAY_BUFFER,pos,gl.DYNAMIC_DRAW);
+    gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+    gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE);
+    const asp=cv.width/cv.height;
+    gl.uniformMatrix4fv(uProj,false,persp(.7,asp,.1,100));
+    const t=ts*.0004;
+    gl.uniformMatrix4fv(uView,false,look(mxn*3+Math.sin(t)*.5,myn*2+Math.cos(t*.7)*.3,12,0,0,0));
+    gl.bindBuffer(gl.ARRAY_BUFFER,pBuf);gl.enableVertexAttribArray(aPos);gl.vertexAttribPointer(aPos,3,gl.FLOAT,false,0,0);
+    gl.bindBuffer(gl.ARRAY_BUFFER,cBuf);gl.enableVertexAttribArray(aCol);gl.vertexAttribPointer(aCol,3,gl.FLOAT,false,0,0);
+    gl.bindBuffer(gl.ARRAY_BUFFER,sBuf);gl.enableVertexAttribArray(aSz);gl.vertexAttribPointer(aSz,1,gl.FLOAT,false,0,0);
+    gl.drawArrays(gl.POINTS,0,N);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+
+/* ──── STATE ──── */
+const ADMIN_EMAIL='heebuchhhmoh@icloud.com',ADMIN_PASS='Admin@ESC2025';
+let CU=JSON.parse(localStorage.getItem('escu')||'null');
+let users=JSON.parse(localStorage.getItem('escusers')||'[]');
+let payments=JSON.parse(localStorage.getItem('escpays')||'[]');
+let myFiles=[];
+let chatCt=0;const FREE_Q=3;
+
+function save(){localStorage.setItem('escusers',JSON.stringify(users));localStorage.setItem('escpays',JSON.stringify(payments));}
+
+/* ──── PAGES ──── */
+function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+function requireAuth(id){if(!CU){openAuth();return;}showPage(id);}
+function openAgentDirect(level,idx){
+  if(!CU){openAuth();return;}
+  showPage('chat-wrap');
+  curLvl=level;
+  document.querySelectorAll('.lvl-btn').forEach((b,i)=>b.classList.toggle('active',(level==='prepa'&&i===0)||(level==='master'&&i===1)));
+  buildAgents(level);
+  selAgent(level,idx);
+}
+
+/* ──── AUTH ──── */
+function openAuth(t='login'){document.getElementById('auth-modal').classList.add('open');swAuth(t);}
+function closeAuth(){document.getElementById('auth-modal').classList.remove('open');}
+function swAuth(t){['login','register'].forEach(x=>{document.getElementById('tab-'+(x==='login'?'l':'r')).classList.toggle('active',x===t);document.getElementById('f-'+x).classList.toggle('active',x===t);});}
+function updRegSpec(){document.getElementById('spec-wrap').style.display=document.getElementById('r-l').value==='master'?'block':'none';}
+
+function doLogin(){
+  const e=document.getElementById('l-e').value.trim(),p=document.getElementById('l-p').value;
+  // Direct admin shortcut: logging in with the admin email + admin password goes straight to the admin dashboard
+  if(e===ADMIN_EMAIL&&p===ADMIN_PASS){
+    closeAuth();
+    showPage('admin-wrap');
+    document.getElementById('adm-login').style.display='none';
+    document.getElementById('adash').style.display='block';
+    document.getElementById('btn-admin').style.display='';
+    refreshAdmin();
+    return;
+  }
+  const u=users.find(u=>u.email===e&&u.pass===p);
+  if(!u){document.getElementById('l-err').style.display='block';return;}
+  CU=u;localStorage.setItem('escu',JSON.stringify(u));closeAuth();updNav();showPage('dashboard');updDash();
+}
+function doRegister(){
+  const n=document.getElementById('r-n').value.trim(),e=document.getElementById('r-e').value.trim(),p=document.getElementById('r-p').value,l=document.getElementById('r-l').value,s=document.getElementById('r-s').value;
+  if(!n||!e||!p||p.length<6){document.getElementById('r-err').style.display='block';return;}
+  if(users.find(u=>u.email===e)){document.getElementById('r-err').textContent='Email déjà utilisé.';document.getElementById('r-err').style.display='block';return;}
+  const u={id:Date.now(),name:n,email:e,pass:p,level:l,spec:s,plan:'gratuit',date:new Date().toLocaleDateString('fr-FR')};
+  users.push(u);save();CU=u;localStorage.setItem('escu',JSON.stringify(u));
+  document.getElementById('r-ok').style.display='block';
+  setTimeout(()=>{closeAuth();updNav();showPage('dashboard');updDash();},700);
+}
+function logout(){CU=null;localStorage.removeItem('escu');updNav();showPage('home');chatCt=0;}
+function updNav(){
+  const ok=!!CU;
+  document.getElementById('btn-login').style.display=ok?'none':'';
+  document.getElementById('btn-signup').style.display=ok?'none':'';
+  document.getElementById('btn-logout').style.display=ok?'':'none';
+  document.getElementById('nlvl').style.display=ok?'':'none';
+  if(CU){const m={prepa1:'Prépa 1',prepa2:'Prépa 2',master:'Master'};document.getElementById('nlvl').textContent=m[CU.level]||'';}
+}
+function updDash(){
+  if(!CU)return;
+  document.getElementById('dname').textContent=CU.name;
+  const lm={prepa1:'Cycle Préparatoire · 1ère Année',prepa2:'Cycle Préparatoire · 2ème Année',master:'Master ESC'};
+  document.getElementById('dmeta').textContent=(lm[CU.level]||'')+(CU.spec?' · '+CU.spec:'');
+  const pm={gratuit:'Plan gratuit · 3 questions/jour',etudiant:'Plan Étudiant · Illimité',premium:'Plan Premium ESC · Accès complet'};
+  document.getElementById('dsub').textContent=pm[CU.plan]||'Plan gratuit';
+}
+
+/* ──── AGENTS ──── */
+const AGENTS={
+  prepa:[
+    {id:'compta',em:'📒',name:'Agent Comptabilité',desc:'Comptabilité générale, écritures, bilan',
+     sys:`Tu es un expert en Comptabilité Générale pour étudiants de Cycle Préparatoire de l'École Supérieure de Commerce (ESC) en Algérie. Tu réponds à TOUTES les questions posées, même difficiles, même hors programme si elles concernent la comptabilité ou les matières proches. Tu réponds en français, de façon pédagogique, claire, avec des exemples chiffrés quand c'est utile. Max 220 mots par réponse.`},
+    {id:'micro',em:'📉',name:'Agent Microéconomie',desc:'Offre, demande, marchés, élasticité',
+     sys:`Tu es un expert en Microéconomie pour étudiants de Cycle Préparatoire ESC Algérie. Tu réponds à TOUTES les questions posées sur la microéconomie et sujets connexes. Réponses en français, pédagogiques, avec formules et exemples. Max 220 mots.`},
+    {id:'macro',em:'🌍',name:'Agent Macroéconomie',desc:'PIB, inflation, chômage, politiques',
+     sys:`Tu es un expert en Macroéconomie pour étudiants de Cycle Préparatoire ESC Algérie. Tu réponds à TOUTES les questions sur la macroéconomie, l'économie algérienne, les politiques économiques. Réponses claires en français avec exemples. Max 220 mots.`},
+    {id:'algebre',em:'🔢',name:'Agent Algèbre',desc:'Matrices, systèmes linéaires, espaces vectoriels',
+     sys:`Tu es un expert en Algèbre pour étudiants de Cycle Préparatoire ESC Algérie. Tu résous et expliques TOUS les exercices et questions d'algèbre, matrices, déterminants, systèmes, espaces vectoriels. Montre toutes les étapes de calcul. Max 250 mots.`},
+    {id:'analyse',em:'📈',name:'Agent Analyse',desc:'Fonctions, limites, dérivées, intégrales',
+     sys:`Tu es un expert en Analyse Mathématique pour étudiants de Cycle Préparatoire ESC Algérie. Tu réponds à TOUTES les questions d'analyse: limites, continuité, dérivées, intégrales, suites, séries. Montre toutes les étapes. Max 250 mots.`},
+    {id:'stats',em:'📊',name:'Agent Proba & Stats',desc:'Probabilités, lois, statistiques descriptives',
+     sys:`Tu es un expert en Probabilités et Statistiques pour étudiants de Cycle Préparatoire ESC Algérie. Tu réponds à TOUTES les questions de probabilités, lois de distributions, statistiques descriptives, tests. Donne des exemples numériques. Max 250 mots.`},
+  ],
+  master:[
+    {id:'mkt',em:'📣',name:'Agent Marketing',desc:'Mix marketing, études de marché, stratégie',
+     sys:`Tu es un expert en Marketing pour étudiants Master ESC Algérie. Tu réponds à TOUTES les questions marketing, stratégie, comportement consommateur, marketing digital, étude de marché. Réponses académiques et pratiques en français. Max 220 mots.`},
+    {id:'banque',em:'🏦',name:'Agent Banque & Monnaie',desc:'Système bancaire, crédit, politique monétaire',
+     sys:`Tu es un expert en Banque et Monnaie pour étudiants Master ESC Algérie. Tu réponds à TOUTES les questions sur le système bancaire algérien, la création monétaire, la politique de la Banque d'Algérie, le crédit, les marchés financiers. Max 220 mots.`},
+    {id:'audit',em:'🔍',name:'Agent Audit',desc:'Audit financier, contrôle interne, normes ISA',
+     sys:`Tu es un expert en Audit pour étudiants Master ESC Algérie. Tu réponds à TOUTES les questions d'audit financier, contrôle interne, commissariat aux comptes, normes ISA, audit fiscal. Réponses rigoureuses en français. Max 220 mots.`},
+    {id:'ci',em:'🌐',name:'Agent Commerce International',desc:'Incoterms, douane, financement export',
+     sys:`Tu es un expert en Commerce International pour étudiants Master ESC Algérie. Tu réponds à TOUTES les questions sur les Incoterms, la réglementation douanière algérienne, le financement des exportations, les accords commerciaux. Max 220 mots.`},
+    {id:'finance',em:'💹',name:'Agent Finance',desc:'Analyse financière, VAN, TRI, marchés',
+     sys:`Tu es un expert en Finance pour étudiants Master ESC Algérie. Tu réponds à TOUTES les questions de finance d'entreprise, analyse financière, gestion de trésorerie, VAN, TRI, marchés financiers, bourse d'Alger. Formules et exemples. Max 220 mots.`},
+  ]
+};
+
+let curLvl='prepa',curAg=0;
+
+function buildAgents(lvl){
+  const list=document.getElementById('ag-list');list.innerHTML='';
+  AGENTS[lvl].forEach((a,i)=>{
+    const d=document.createElement('div');d.className='ag-item'+(i===0?' active':'');
+    d.innerHTML=`<span class="ag-em">${a.em}</span>${a.name}`;
+    d.onclick=()=>selAgent(lvl,i,d);list.appendChild(d);
+  });
+}
+
+function swLevel(lvl,btn){
+  curLvl=lvl;curAg=0;
+  document.querySelectorAll('.lvl-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+  buildAgents(lvl);selAgent(lvl,0);
+}
+
+function selAgent(lvl,idx,btn){
+  curAg=idx;
+  document.querySelectorAll('.ag-item').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  const a=AGENTS[lvl][idx];
+  document.getElementById('c-av').textContent=a.em;
+  document.getElementById('c-name').textContent=a.name;
+  document.getElementById('c-desc').textContent=a.desc;
+  const msgs=document.getElementById('chat-msgs');msgs.innerHTML='';
+  addMsg(`Bonjour ! Je suis ${a.name}. Je peux répondre à toutes vos questions sur : <em>${a.desc}</em>. Posez-moi n'importe quelle question ! 📚`,'agent');
+  chatCt=0;document.getElementById('limit-bar').style.display='none';
+}
+
+function addMsg(txt,type){
+  const msgs=document.getElementById('chat-msgs');
+  const a=AGENTS[curLvl][curAg];
+  const div=document.createElement('div');div.className=`msg${type==='user'?' u':''}`;
+  div.innerHTML=`<div class="msg-av">${type==='user'?'🎓':a.em}</div><div><div class="msg-bubble">${txt}</div><div class="msg-time">${new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}</div></div>`;
+  msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;
+}
+
+function showTyping(){
+  const msgs=document.getElementById('chat-msgs');
+  const a=AGENTS[curLvl][curAg];
+  const div=document.createElement('div');div.id='ty';div.className='msg';
+  div.innerHTML=`<div class="msg-av">${a.em}</div><div><div class="msg-bubble"><div class="typing"><span></span><span></span><span></span></div></div></div>`;
+  msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;
+}
+function rmTyping(){const t=document.getElementById('ty');if(t)t.remove();}
+
+/* Conversation history per agent session */
+let chatHistory=[];
+
+function formatReply(text){
+  // Bold **text**
+  text=text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
+  // Bullet lines starting with - or •
+  const lines=text.split('\n');
+  let html='',inList=false;
+  lines.forEach(line=>{
+    const t=line.trim();
+    if(!t){if(inList){html+='</ul>';inList=false;}html+='<br>';return;}
+    if(/^[-•]\s/.test(t)){
+      if(!inList){html+='<ul style="padding-left:16px;margin:6px 0">';inList=true;}
+      html+=`<li style="margin-bottom:4px">${t.replace(/^[-•]\s*/,'').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</li>`;
+    }else{
+      if(inList){html+='</ul>';inList=false;}
+      html+=`<p style="margin-bottom:6px">${t}</p>`;
+    }
+  });
+  if(inList)html+='</ul>';
+  return html;
+}
+
+async function sendChat(){
+  const inp=document.getElementById('cinp'),text=inp.value.trim();
+  if(!text)return;
+  const isPrem=CU&&['etudiant','premium'].includes(CU.plan);
+  if(!isPrem&&chatCt>=FREE_Q){document.getElementById('limit-bar').style.display='block';return;}
+  addMsg(text,'user');inp.value='';chatCt++;
+  if(!isPrem&&chatCt>=FREE_Q)document.getElementById('limit-bar').style.display='block';
+  showTyping();
+  const ag=AGENTS[curLvl][curAg];
+  chatHistory.push({role:'user',content:text});
+  if(chatHistory.length>20)chatHistory=chatHistory.slice(-20);
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-6',
+        max_tokens:800,
+        system:ag.sys+'\n\nRègles OBLIGATOIRES:\n- Réponds TOUJOURS en français sauf si on te demande une autre langue\n- Utilise ** ** pour mettre en gras les termes importants\n- Utilise des tirets (-) pour les listes\n- Montre toutes les étapes pour les calculs mathématiques\n- Donne toujours une réponse utile et complète, ne dis jamais que tu ne peux pas répondre\n- Inclus des exemples concrets algériens quand c\'est pertinent',
+        messages:chatHistory
+      })
+    });
+    if(!res.ok){throw new Error('HTTP '+res.status);}
+    const d=await res.json();
+    rmTyping();
+    if(d.error||!d.content){
+      chatHistory.pop();
+      addMsg(smartFallback(ag.id,text),'agent');
+    }else{
+      const reply=d.content[0].text;
+      chatHistory.push({role:'assistant',content:reply});
+      addMsg(formatReply(reply),'agent');
+    }
+  }catch(err){
+    rmTyping();
+    chatHistory.pop();
+    addMsg(smartFallback(ag.id,text),'agent');
+  }
+}
+
+function smartFallback(agId,question){
+  const q=question.toLowerCase();
+  // Smart keyword-based fallback responses
+  const answers={
+    compta:[
+      ['bilan','Le <strong>bilan comptable</strong> est un document qui présente à une date donnée :<br>- <strong>Actif</strong> : ce que possède l\'entreprise (immobilisations, stocks, créances, trésorerie)<br>- <strong>Passif</strong> : ce que doit l\'entreprise (capitaux propres, dettes)<br>Règle fondamentale : <strong>Total Actif = Total Passif</strong>'],
+      ['journal','Le <strong>journal comptable</strong> enregistre chronologiquement toutes les opérations. Chaque écriture respecte la <strong>partie double</strong> : Débit = Crédit.<br>Exemple : Achat marchandises 50 000 DA<br>- Débit Marchandises : 50 000 DA<br>- Crédit Caisse/Fournisseur : 50 000 DA'],
+      ['amortissement','L\'<strong>amortissement</strong> constate la perte de valeur d\'un bien sur sa durée de vie.<br>- Amortissement linéaire : Annuité = Valeur / Durée<br>- Amortissement dégressif : Taux dégressif = Taux linéaire × Coefficient<br>Exemple : Machine 200 000 DA sur 5 ans → Annuité = 40 000 DA/an'],
+      ['tva','La <strong>TVA</strong> (Taxe sur la Valeur Ajoutée) est collectée par l\'entreprise pour l\'État.<br>- TVA collectée (sur ventes) − TVA déductible (sur achats) = TVA à décaisser<br>Taux en Algérie : 19% (taux normal), 9% (taux réduit)'],
+      ['résultat','Le <strong>Compte de Résultat</strong> = Produits − Charges<br>- Si Produits > Charges → <strong>Bénéfice</strong><br>- Si Charges > Produits → <strong>Perte</strong><br>Résultat Net = Résultat d\'exploitation + Résultat financier + Résultat exceptionnel − IS'],
+      ['default','En <strong>comptabilité générale</strong>, voici les principes clés :<br>- <strong>Partie double</strong> : tout débit a un crédit égal<br>- <strong>Prudence</strong> : constater les pertes probables, pas les gains incertains<br>- <strong>Continuité</strong> : l\'entreprise est supposée continuer son activité<br>Posez votre question plus précisément pour une réponse ciblée !']
+    ],
+    micro:[
+      ['demande','La <strong>loi de la demande</strong> : quand le prix augmente, la quantité demandée diminue (relation inverse).<br>- <strong>Élasticité-prix</strong> : Ed = (ΔQ/Q) / (ΔP/P)<br>- Si |Ed| > 1 → demande élastique<br>- Si |Ed| < 1 → demande inélastique<br>Exemple : si le prix augmente de 10% et la demande baisse de 20%, Ed = -2 (élastique)'],
+      ['offre','La <strong>loi de l\'offre</strong> : quand le prix augmente, la quantité offerte augmente (relation directe).<br>Les déterminants de l\'offre : coût des facteurs, technologie, prix des biens liés, anticipations.<br>Élasticité-prix de l\'offre : Es = (ΔQ/Q) / (ΔP/P)'],
+      ['équilibre','L\'<strong>équilibre du marché</strong> est le point où Qdemandée = Qofferte.<br>- Prix d\'équilibre P* et quantité Q* sont déterminés à l\'intersection<br>- En dessous de P* : excès de demande (pénurie)<br>- Au-dessus de P* : excès d\'offre (surplus)'],
+      ['default','En <strong>microéconomie</strong>, les concepts clés du programme Prépa ESC sont :<br>- Théorie du consommateur (utilité, contrainte budgétaire)<br>- Théorie du producteur (coûts, maximisation du profit)<br>- Structures de marché : concurrence parfaite, monopole, oligopole<br>Quelle notion voulez-vous approfondir ?']
+    ],
+    macro:[
+      ['pib','Le <strong>PIB</strong> (Produit Intérieur Brut) mesure la richesse créée dans un pays.<br>- <strong>PIB par la demande</strong> : PIB = C + I + G + (X − M)<br>- <strong>PIB par la production</strong> : Σ Valeurs Ajoutées<br>En Algérie (2023) : PIB ≈ 230 milliards USD, dominé par les hydrocarbures (≈ 20% du PIB)'],
+      ['inflation','L\'<strong>inflation</strong> est la hausse généralisée et durable des prix.<br>- Mesurée par l\'<strong>IPC</strong> (Indice des Prix à la Consommation)<br>- Causes : inflation par la demande, par les coûts, monétaire<br>- En Algérie : taux d\'inflation ≈ 9% en 2023<br>La Banque d\'Algérie agit via le taux directeur pour la contrôler'],
+      ['chômage','Le <strong>taux de chômage</strong> = (Chômeurs / Population active) × 100<br>Types : frictionnel, structurel, conjoncturel, déguisé.<br>En Algérie : taux de chômage officiel ≈ 11-12%, avec chômage des jeunes plus élevé (≈ 25%)'],
+      ['default','En <strong>macroéconomie</strong>, les thèmes clés Prépa ESC :<br>- Comptabilité nationale (PIB, PNB, valeur ajoutée)<br>- Politiques conjoncturelles (budgétaire, monétaire)<br>- Équilibres macroéconomiques (IS-LM, offre/demande globale)<br>- Économie algérienne (hydrocarbures, diversification)<br>Précisez votre question !']
+    ],
+    algebre:[
+      ['matrice','Les <strong>opérations sur matrices</strong> :<br>- Addition : (A+B)ij = Aij + Bij (matrices de même taille)<br>- Multiplication : (AB)ij = Σk Aik × Bkj<br>- Déterminant 2×2 : det(A) = ad − bc pour [[a,b],[c,d]]<br>- Inverse : A⁻¹ = (1/det A) × Adj(A), si det(A) ≠ 0'],
+      ['système','Résolution d\'un <strong>système linéaire</strong> AX = B :<br>1. <strong>Méthode de Gauss</strong> : réduction ligne par ligne<br>2. <strong>Règle de Cramer</strong> : Xi = det(Ai)/det(A)<br>3. <strong>Matrice inverse</strong> : X = A⁻¹B<br>Le système a une solution unique si det(A) ≠ 0'],
+      ['vecteur','Un <strong>espace vectoriel</strong> est un ensemble muni de deux opérations (addition et multiplication par scalaire) vérifiant 8 axiomes.<br>- <strong>Sous-espace</strong> : stable par combinaison linéaire<br>- <strong>Base</strong> : famille libre et génératrice<br>- <strong>Dimension</strong> : cardinal d\'une base'],
+      ['default','En <strong>Algèbre</strong> Prépa ESC, les chapitres principaux :<br>- Matrices et déterminants<br>- Systèmes d\'équations linéaires<br>- Espaces vectoriels, bases, dimension<br>- Applications linéaires<br>Donnez-moi un exercice ou une notion à expliquer !']
+    ],
+    analyse:[
+      ['limite','Calcul de <strong>limites</strong> — méthodes :<br>- Substitution directe si pas de forme indéterminée<br>- Formes indéterminées (0/0, ∞/∞) : factoriser, conjuguer, règle de L\'Hôpital<br>- En ±∞ : garder le terme dominant<br>Exemple : lim(x→∞) (3x²+2x)/(x²−1) = 3'],
+      ['dérivé','Règles de <strong>dérivation</strong> :<br>- (xⁿ)\' = nxⁿ⁻¹<br>- (uv)\' = u\'v + uv\'<br>- (u/v)\' = (u\'v − uv\')/v²<br>- (f∘g)\' = g\' × f\'(g(x)) (composition)<br>- (eˣ)\' = eˣ ; (ln x)\' = 1/x'],
+      ['intégrale','<strong>Intégration</strong> — formules clés :<br>- ∫xⁿ dx = xⁿ⁺¹/(n+1) + C (n ≠ −1)<br>- ∫eˣ dx = eˣ + C<br>- ∫(1/x) dx = ln|x| + C<br>- Intégration par parties : ∫u\'v = [uv] − ∫uv\'<br>- Intégrale définie : ∫ₐᵇ f(x)dx = F(b) − F(a)'],
+      ['default','En <strong>Analyse Mathématique</strong> Prépa ESC :<br>- Suites numériques (convergence, limites)<br>- Fonctions : limites, continuité, dérivabilité<br>- Étude de fonctions (variations, extrema, asymptotes)<br>- Intégration (primitives, intégrales définies)<br>Posez un exercice ou une question précise !']
+    ],
+    stats:[
+      ['moyenne','<strong>Statistiques descriptives</strong> :<br>- <strong>Moyenne</strong> : x̄ = (1/n) Σxi<br>- <strong>Médiane</strong> : valeur centrale (50% des données de chaque côté)<br>- <strong>Mode</strong> : valeur la plus fréquente<br>- <strong>Variance</strong> : σ² = (1/n) Σ(xi − x̄)²<br>- <strong>Écart-type</strong> : σ = √variance'],
+      ['probabilité','<strong>Probabilités</strong> :<br>- P(A) ∈ [0,1], P(Ω) = 1<br>- P(A∪B) = P(A) + P(B) − P(A∩B)<br>- Si A et B indépendants : P(A∩B) = P(A)×P(B)<br>- <strong>Bayes</strong> : P(A|B) = P(B|A)×P(A) / P(B)'],
+      ['loi normale','La <strong>loi normale N(μ,σ²)</strong> :<br>- Courbe en cloche, symétrique autour de μ<br>- Règle 68-95-99.7 : 68% dans [μ±σ], 95% dans [μ±2σ]<br>- Standardisation : Z = (X−μ)/σ ~ N(0,1)<br>- IC à 95% : [x̄ ± 1.96 × σ/√n]'],
+      ['default','En <strong>Probabilités & Statistiques</strong> Prépa ESC :<br>- Statistiques descriptives (tendance centrale, dispersion)<br>- Probabilités (événements, lois de probabilité)<br>- Lois discrètes (Binomiale, Poisson)<br>- Lois continues (Normale, Exponentielle)<br>- Tests d\'hypothèses<br>Quelle notion ou exercice souhaitez-vous ?']
+    ],
+    mkt:[
+      ['mix','Le <strong>Mix Marketing (4P → 7P)</strong> :<br>- <strong>Produit</strong> : gamme, marque, cycle de vie, packaging<br>- <strong>Prix</strong> : pénétration, écrémage, psychologique<br>- <strong>Place</strong> : distribution directe/indirecte, omnicanal<br>- <strong>Promotion</strong> : publicité, promo, RP, marketing digital<br>+ Personnes, Processus, Preuve physique (marketing des services)'],
+      ['segmentation','<strong>SCP : Segmentation − Ciblage − Positionnement</strong><br>- <strong>Segmentation</strong> : diviser le marché en groupes homogènes (géo, démo, psycho, comportemental)<br>- <strong>Ciblage</strong> : choisir le(s) segment(s) cibles<br>- <strong>Positionnement</strong> : définir l\'image distinctive dans l\'esprit du consommateur'],
+      ['default','En <strong>Marketing</strong> Master ESC :<br>- Environnement marketing (PESTEL, analyse concurrentielle)<br>- Comportement du consommateur<br>- Stratégies marketing (SCP, différenciation, coûts)<br>- Marketing digital et réseaux sociaux<br>- Marketing mix et plan marketing<br>Précisez votre question !']
+    ],
+    banque:[
+      ['crédit','Le <strong>crédit bancaire</strong> est le principal instrument de financement.<br>Types : crédit à court terme (facilité de caisse, escompte), moyen terme (équipement), long terme (immobilier).<br>Le <strong>multiplicateur de crédit</strong> = 1/r (r = taux de réserves obligatoires)<br>En Algérie : la réglementation BdA (règlement 09-04) encadre les crédits'],
+      ['monnaie','La <strong>masse monétaire</strong> en Algérie (agrégats) :<br>- M1 : billets + dépôts à vue<br>- M2 : M1 + dépôts à terme et épargne<br>- M3 : M2 + instruments de marché<br>La <strong>Banque d\'Algérie</strong> contrôle M2 via le taux directeur et les réserves obligatoires'],
+      ['default','En <strong>Banque & Monnaie</strong> Master ESC :<br>- Système bancaire algérien (BdA, banques commerciales, CPA, BNA, BADR…)<br>- Création monétaire et multiplicateur de crédit<br>- Instruments de politique monétaire<br>- Marché monétaire et marché financier algérien<br>Quelle question précise avez-vous ?']
+    ],
+    audit:[
+      ['contrôle interne','Le <strong>Contrôle Interne</strong> selon COSO :<br>1. Environnement de contrôle (culture, éthique)<br>2. Évaluation des risques<br>3. Activités de contrôle (séparation des tâches, validations)<br>4. Information & Communication<br>5. Pilotage<br>Objectifs : fiabilité de l\'info, conformité, efficacité des opérations'],
+      ['audit financier','L\'<strong>Audit Financier</strong> vise à certifier que les états financiers donnent une <strong>image fidèle</strong>.<br>Étapes :<br>1. Prise de connaissance de l\'entité<br>2. Évaluation des risques<br>3. Tests de contrôles et tests substantifs<br>4. Conclusion et rapport (certification, réserves, refus)'],
+      ['default','En <strong>Audit</strong> Master ESC :<br>- Audit légal (CAC) vs audit contractuel<br>- Normes ISA et normes algériennes<br>- Contrôle interne (COSO)<br>- Audit des cycles (ventes, achats, trésorerie, stocks)<br>- Rapport d\'audit et opinions<br>Posez votre question !']
+    ],
+    ci:[
+      ['incoterms','Les <strong>Incoterms 2020</strong> (11 règles) :<br>- <strong>EXW</strong> : l\'acheteur prend tout en charge à l\'usine<br>- <strong>FOB</strong> : vendeur livre à bord du navire (port d\'embarquement)<br>- <strong>CIF</strong> : vendeur paie coût + assurance + fret jusqu\'au port de destination<br>- <strong>DDP</strong> : vendeur livre dédouané, droits acquittés<br>Conseil : FOB et CIF sont les plus utilisés en Algérie'],
+      ['douane','La <strong>réglementation douanière algérienne</strong> :<br>- Loi de finances annuelle fixe les droits et taxes<br>- Procédures : domiciliation bancaire obligatoire, DUM (Déclaration Unique de Marchandise)<br>- Régimes : mise à la consommation, transit, admission temporaire<br>- Inspection EDII (Entreprise de Dédouanement et d\'Inspection Internationale)'],
+      ['default','En <strong>Commerce International</strong> Master ESC :<br>- Théories du commerce international (avantages comparatifs, HOS)<br>- Incoterms et contrats commerciaux internationaux<br>- Financement des échanges (crédit doc, remise doc, CREDOC)<br>- Réglementation algérienne des importations/exportations<br>- Organisations : OMC, accords bilatéraux Algérie<br>Posez votre question !']
+    ],
+    finance:[
+      ['van','La <strong>VAN (Valeur Actuelle Nette)</strong> :<br>VAN = −I₀ + Σ [CFt / (1+i)^t]<br>- Si VAN > 0 → projet rentable, <strong>accepter</strong><br>- Si VAN < 0 → projet non rentable, <strong>rejeter</strong><br>Le <strong>TRI</strong> est le taux i qui rend VAN = 0.<br>Règle : si TRI > coût du capital → projet acceptable'],
+      ['analyse financière','<strong>Analyse financière</strong> — indicateurs clés :<br>- <strong>FR</strong> = Capitaux permanents − Actif immobilisé<br>- <strong>BFR</strong> = (Stocks + Créances) − Dettes d\'exploitation<br>- <strong>Trésorerie nette</strong> = FR − BFR<br>Ratios : liquidité générale, solvabilité, rentabilité économique (ROA), financière (ROE)'],
+      ['default','En <strong>Finance</strong> Master ESC :<br>- Analyse financière (bilan, SIG, ratios)<br>- Décisions d\'investissement (VAN, TRI, délai de récupération)<br>- Financement (fonds propres, dettes, leasing)<br>- Gestion de trésorerie et BFR<br>- Marché financier algérien (Bourse d\'Alger)<br>Quelle notion souhaitez-vous approfondir ?']
+    ]
+  };
+  const agAnswers=answers[agId]||[];
+  // Try keyword match
+  for(const [kw,ans] of agAnswers){
+    if(kw!=='default'&&q.includes(kw))return ans;
+  }
+  // Default for this agent
+  const def=agAnswers.find(([k])=>k==='default');
+  if(def)return def[1];
+  return `Je suis prêt à répondre à vos questions. La connexion à l'API est momentanément indisponible, mais posez votre question et je ferai de mon mieux avec mes connaissances intégrées !`;
+}
+
+/* ──── HOME TAB SWITCHERS ──── */
+function switchModTab(lvl,btn){
+  document.querySelectorAll('.mod-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+  document.querySelectorAll('.module-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('mp-'+lvl).classList.add('active');
+}
+
+/* ──── EXPOSÉ ──── */
+const EXP_MODS={prepa:['Comptabilité Générale','Microéconomie','Macroéconomie','Algèbre','Analyse Mathématique','Probabilités & Statistiques'],master:['Marketing','Banque & Monnaie','Audit','Commerce International','Finance']};
+function updExpMod(){const l=document.getElementById('elevel').value;const s=document.getElementById('emod');s.innerHTML=EXP_MODS[l].map(m=>`<option>${m}</option>`).join('');}
+updExpMod();
+
+async function genExpose(){
+  const title=document.getElementById('etitle').value.trim();
+  const mod=document.getElementById('emod').value;
+  const pages=document.getElementById('epages').value;
+  const lang=document.getElementById('elang').value;
+  const notes=document.getElementById('enotes').value.trim();
+  if(!title){toast('⚠ Veuillez saisir un titre','err');return;}
+  if(!CU){openAuth();return;}
+  if(!['etudiant','premium'].includes(CU.plan)){toast('⚠ Abonnement requis pour les exposés','err');setTimeout(()=>showPage('sub-wrap'),1000);return;}
+  const btn=document.getElementById('genbtn');btn.disabled=true;btn.textContent='⏳ Génération…';
+  const lm={fr:'français',ar:'arabe',en:'anglais'};
+  const prompt=`Génère un exposé académique complet et détaillé en ${lm[lang]} pour un étudiant en ${mod} à l'École Supérieure de Commerce (ESC) algérienne.
+
+Sujet : "${title}"
+Volume souhaité : environ ${pages}
+${notes?'Instructions : '+notes:''}
+
+STRUCTURE OBLIGATOIRE :
+Page de garde (titre, module, date)
+INTRODUCTION (contexte, problématique, annonce du plan)
+PARTIE I : [titre pertinent] avec 2-3 sous-parties développées
+PARTIE II : [titre pertinent] avec 2-3 sous-parties développées
+PARTIE III : [titre pertinent] avec 2-3 sous-parties développées
+CONCLUSION (synthèse, ouverture)
+BIBLIOGRAPHIE (5+ références)
+
+Écris un contenu riche, académique, avec des exemples algériens quand approprié, des chiffres et données quand disponibles, et une argumentation solide.`;
+
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:3500,messages:[{role:'user',content:prompt}]})});
+    const d=await res.json();
+    renderExp(title,mod,d.content?.[0]?.text||'Erreur. Réessayez.');
+  }catch{
+    renderExp(title,mod,`INTRODUCTION\n\n${title} est un sujet central en ${mod}. Nous analyserons ses composantes, implications et applications dans le contexte algérien.\n\nPARTIE I : Fondements théoriques\n\nAnalyse des concepts clés et approches académiques liées à ${title}.\n\nPARTIE II : Analyse approfondie\n\nExamen des mécanismes, enjeux et dimensions pratiques du sujet.\n\nPARTIE III : Contexte algérien et perspectives\n\nApplication au contexte de l'économie algérienne et perspectives d'avenir.\n\nCONCLUSION\n\nSynthèse des points essentiels abordés et perspectives futures.\n\nBIBLIOGRAPHIE\n\n- Cours de ${mod}, ESC Algérie\n- Documents officiels de la Banque d'Algérie / ONS\n- Références académiques spécialisées`);
+  }
+  btn.disabled=false;btn.textContent='✨ Générer l\'Exposé';
+}
+
+function renderExp(title,mod,text){
+  document.getElementById('res-title').textContent=title;
+  document.getElementById('res-meta').textContent=`Module : ${mod} · ${new Date().toLocaleDateString('fr-FR')}`;
+  const body=document.getElementById('res-body');body.innerHTML='';
+  let html='',inSec=false;
+  text.split('\n').forEach(line=>{
+    line=line.trim();if(!line)return;
+    if(/^(INTRODUCTION|CONCLUSION|BIBLIOGRAPHIE|PARTIE\s[IVX0-9]+|PAGE DE GARDE|SECTION)/i.test(line)||/^(I\.|II\.|III\.|IV\.|V\.)/.test(line)){
+      if(inSec)html+='</div>';html+=`<div class="exp-sec"><h3>${line}</h3>`;inSec=true;
+    }else if(/^[-•]\s/.test(line)){html+=`<ul><li>${line.replace(/^[-•]\s*/,'')}</li></ul>`;}
+    else{html+=`<p>${line}</p>`;}
+  });
+  if(inSec)html+='</div>';
+  body.innerHTML=html||`<div class="exp-sec"><p>${text}</p></div>`;
+  document.getElementById('exp-result').style.display='block';
+  document.getElementById('exp-result').scrollIntoView({behavior:'smooth'});
+}
+function copyExp(){navigator.clipboard.writeText(document.getElementById('res-title').textContent+'\n\n'+document.getElementById('res-body').innerText);toast('✓ Copié !','ok');}
+
+/* ──── FILES ──── */
+function handleFiles(fl){Array.from(fl).forEach(f=>{if(f.size>20*1024*1024){toast('Fichier trop grand (max 20 MB)','err');return;}myFiles.push({id:Date.now()+Math.random(),name:f.name,size:(f.size/1024).toFixed(0)+' Ko',type:f.type,date:new Date().toLocaleDateString('fr-FR')});renderFileList();});}
+function dropFiles(e){e.preventDefault();document.getElementById('dropzone').classList.remove('drag');handleFiles(e.dataTransfer.files);}
+function renderFileList(){
+  const c=document.getElementById('file-items');
+  if(!myFiles.length){c.innerHTML='<div style="text-align:center;color:rgba(238,240,245,.3);font-size:14px;padding:24px">Aucun fichier importé.</div>';return;}
+  c.innerHTML=myFiles.map((f,i)=>`<div class="fitem"><div class="fitem-icon">${f.type.includes('pdf')?'📄':f.type.includes('image')?'🖼️':'📁'}</div><div class="fitem-info"><div class="fitem-name">${f.name}</div><div class="fitem-meta">${f.size} · ${f.date}</div></div><div class="fitem-btns"><button class="fask" onclick="askFile('${f.name}')">💬 Question</button><button class="fdel" onclick="delFile(${i})">✕</button></div></div>`).join('');
+}
+function askFile(name){showPage('chat-wrap');document.getElementById('cinp').value=`J'ai le fichier "${name}", aide-moi à comprendre et réviser son contenu.`;}
+function delFile(i){myFiles.splice(i,1);renderFileList();}
+
+/* ──── PAYMENT ──── */
+let selPlan='',selAmt='';
+function openPay(plan,amt){selPlan=plan;selAmt=amt;document.getElementById('pay-pill').textContent=`Formule ${plan} · ${amt} DA/mois`;document.getElementById('pay-amount').textContent=amt+' DA';document.getElementById('pay-modal').classList.add('open');}
+function closePay(){document.getElementById('pay-modal').classList.remove('open');}
+
+function submitPay(){
+  const n=document.getElementById('pn').value.trim(),e=document.getElementById('pe').value.trim(),c=document.getElementById('pc').value.trim();
+  const file=document.getElementById('pr').files[0];
+  if(!n||!e||!c){toast('⚠ Remplissez tous les champs obligatoires','err');return;}
+  if(file){const r=new FileReader();r.onload=ev=>finPay(n,e,c,ev.target.result);r.readAsDataURL(file);}
+  else finPay(n,e,c,null);
+}
+function finPay(n,e,c,receipt){
+  const p={id:Date.now(),name:n,email:e,plan:selPlan,amount:selAmt,ccp:c,receipt,status:'pending',date:new Date().toLocaleDateString('fr-FR')};
+  payments.push(p);save();closePay();
+  document.getElementById('ok-modal').classList.add('open');
+  document.getElementById('pn').value='';document.getElementById('pe').value='';document.getElementById('pc').value='';document.getElementById('pr').value='';
+}
+
+/* ──── ADMIN ──── */
+function adminLogin(){
+  if(document.getElementById('ae').value.trim()===ADMIN_EMAIL&&document.getElementById('ap').value===ADMIN_PASS){
+    document.getElementById('adm-login').style.display='none';document.getElementById('adash').style.display='block';
+    document.getElementById('btn-admin').style.display='';
+    refreshAdmin();
+  }else{document.getElementById('aerr').style.display='block';}
+}
+function adminOut(){document.getElementById('adm-login').style.display='';document.getElementById('adash').style.display='none';document.getElementById('ae').value='';document.getElementById('ap').value='';}
+function swAdm(tab,btn){document.querySelectorAll('.adm-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.adm-panel').forEach(p=>p.classList.remove('active'));document.getElementById('adm-'+tab).classList.add('active');}
+
+function refreshAdmin(){
+  document.getElementById('sU').textContent=users.length;
+  document.getElementById('sA').textContent=payments.filter(p=>p.status==='active').length;
+  document.getElementById('sP').textContent=payments.filter(p=>p.status==='pending').length;
+  document.getElementById('sR').textContent=payments.filter(p=>p.status==='active').reduce((s,p)=>s+parseInt(p.amount||0),0).toLocaleString()+' DA';
+  document.getElementById('pay-tbody').innerHTML=payments.length?payments.map(p=>`<tr><td>${p.name}</td><td>${p.email}</td><td>${p.plan}</td><td>${p.amount} DA</td><td>${p.ccp}</td><td><span class="bdg ${p.status==='active'?'b-a':p.status==='pending'?'b-p':'b-e'}">${p.status==='active'?'Actif':p.status==='pending'?'En attente':'Expiré'}</span></td><td>${p.date}</td><td>${p.status==='pending'?`<button class="appbtn" onclick="approve('${p.id}')">✓ Approuver</button>`:'—'}</td></tr>`).join(''):'<tr><td colspan="8" style="text-align:center;color:rgba(238,240,245,.25);padding:28px">Aucune demande.</td></tr>';
+  document.getElementById('users-tbody').innerHTML=users.length?users.map(u=>`<tr><td>${u.name}</td><td>${u.email}</td><td>${u.level}</td><td>${u.spec||'—'}</td><td><span class="bdg ${u.plan==='gratuit'?'b-e':'b-a'}">${u.plan}</span></td><td>${u.date}</td></tr>`).join(''):'<tr><td colspan="6" style="text-align:center;color:rgba(238,240,245,.25);padding:28px">Aucun utilisateur.</td></tr>';
+  const recs=payments.filter(p=>p.receipt);
+  document.getElementById('receipts-tbody').innerHTML=recs.length?recs.map(p=>`<tr><td>${p.name}</td><td>${p.plan}</td><td>${p.receipt?`<img src="${p.receipt}" class="receipt-thumb">`:'—'}</td><td>${p.date}</td><td>${p.status==='pending'?`<button class="appbtn" onclick="approve('${p.id}')">✓ Approuver</button>`:'Approuvé'}</td></tr>`).join(''):'<tr><td colspan="5" style="text-align:center;color:rgba(238,240,245,.25);padding:28px">Aucun reçu uploadé.</td></tr>';
+}
+
+function approve(id){
+  const p=payments.find(p=>String(p.id)===String(id));if(!p)return;
+  p.status='active';
+  const u=users.find(u=>u.email===p.email);
+  if(u){u.plan=p.plan.toLowerCase().includes('premium')?'premium':'etudiant';save();}
+  save();refreshAdmin();toast('✓ Abonnement activé pour '+p.name,'ok');
+}
+
+/* ──── TOAST ──── */
+function toast(msg,type='ok'){const t=document.getElementById('toast');t.textContent=msg;t.className='show '+(type==='ok'?'ok':'err');setTimeout(()=>{t.className='';},3000);}
+
+/* ──── INIT ──── */
+buildAgents('prepa');selAgent('prepa',0);renderFileList();
+if(CU){updNav();updDash();}
+
+/* SCROLL REVEAL */
+const sObs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='none';}});},{threshold:.08});
+document.querySelectorAll('.feat-card,.dcard,.mod-card,.plan,.ast,.fc').forEach(el=>{el.style.opacity='0';el.style.transform='translateY(28px)';el.style.transition='opacity .55s ease, transform .55s ease';sObs.observe(el);});
+</script>
+</body>
+</html>
